@@ -125,11 +125,62 @@ EOF
 }
 
 
+run_sql_plain()
+{
+    local sql_query="$1"
+    local section_title="$2"
+    local check_threshold="$3"
 
+    echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<pre><code>" >> $HTMLFILE
+
+    sqlplus -s / as sysdba <<EOF >> $HTMLFILE
+	SET PAGESIZE 1000
+    SET LINESIZE 200
+    SET FEEDBACK OFF
+    SET HEADING ON
+    $sql_query
+    EXIT;
+EOF
+echo "</code></pre><hr>" >> $HTMLFILE
+}
+
+
+run_command() {
+    local command="$1"
+    local section_title="$2"
+
+    echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<pre><code>" >> $HTMLFILE
+    eval "$command" >> $HTMLFILE
+    echo "</code></pre><hr>" >> $HTMLFILE
+}
+
+
+
+# Main Fuction
 main() {
 
 # Clear previous HTML file
 > $HTMLFILE
+
+# adding the style sheet
+genrateStyle
+
+# 1. Database Details
+run_sql_plain "select dbid,name,created,log_mode,open_mode from v\$database;" "Database Details"
+
+# 2. Check Instance Details
+run_sql_plain " SET LINESIZE 180
+				SET PAGESIZE 1000
+				COLUMN \"Instance_name\" FORMAT A15
+				COLUMN \"host_name\" FORMAT A30
+				COLUMN \"version\" FORMAT A15
+				COLUMN \"status\" FORMAT A10
+				select instance_name,host_name,version,status from v\$instance;" "Instance Details"
+
+
+
 
 
 }
