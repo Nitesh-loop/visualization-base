@@ -356,12 +356,12 @@ run_sql_plain " SET LINESIZE 300
 
 
 # Archive Generation Per Day
-run_sql_plain "SET LINESIZE 300
-		 SET PAGESIZE 50
-		 COLUMN \"DAY\" FORMAT A30
-		 COLUMN \"GB\" FORMAT 9999.99
-		 COLUMN \"ARCHIVES_GENERATED_PER_DAY\" FORMAT 9999.99
-		 SELECT TRUNC(COMPLETION_TIME, 'DD') AS \"DAY\",ROUND(SUM(BLOCKS * BLOCK_SIZE) / 1024 / 1024 / 1024) AS \"GB\",COUNT(*) AS \"ARCHIVES_GENERATED_PER_DAY\" FROM v\$ARCHIVED_LOG WHERE COMPLETION_TIME > SYSDATE-6 GROUP BY TRUNC(COMPLETION_TIME, 'DD')ORDER BY 1 DESC;" "Archive Generation Per Day"
+run_sql_plain " SET LINESIZE 300
+		        SET PAGESIZE 50
+		        COLUMN \"DAY\" FORMAT A30
+		        COLUMN \"GB\" FORMAT 9999.99
+		        COLUMN \"ARCHIVES_GENERATED_PER_DAY\" FORMAT 9999.99
+		        SELECT TRUNC(COMPLETION_TIME, 'DD') AS \"DAY\",ROUND(SUM(BLOCKS * BLOCK_SIZE) / 1024 / 1024 / 1024) AS \"GB\",COUNT(*) AS \"ARCHIVES_GENERATED_PER_DAY\" FROM v\$ARCHIVED_LOG WHERE COMPLETION_TIME > SYSDATE-6 GROUP BY TRUNC(COMPLETION_TIME, 'DD')ORDER BY 1 DESC;" "Archive Generation Per Day"
 
 
 # Usage Of Temp Tablespace Usage
@@ -442,8 +442,7 @@ run_sql_plain "	SET LINESIZE 250
 
 
 # Database RMAN Backup Summary 
-run_sql_plain "
-				SET LINESIZE 150
+run_sql_plain "	SET LINESIZE 150
 				SET PAGESIZE 1000
 				COLUMN \"SESSION_KEY\" FORMAT 999999999999999
 				COLUMN \"START_TIME\" FORMAT A30
@@ -478,7 +477,7 @@ run_sql_plain " SET LINESIZE 300
 # --------------------------------------query on PDB--------------------------------------
 
 # Total Invalid Objects in PDB Database
-run_sql_PDB " SET LINESIZE 150
+run_sql_PDB "   SET LINESIZE 150
 				SET PAGESIZE 1000
 				COLUMN \"OWNER\" FORMAT A10
 				COLUMN \"OBJECT_NAME\" FORMAT A40
@@ -525,6 +524,7 @@ run_sql_PDB "	SET LINESIZE 300
 				COLUMN \"STATUS\" FORMAT A120
 				COLUMN \"COUNT\" FORMAT 999999
 				select decode(phase_code,'R','Running','I','Inactive','C','Completed','P','Pending')||' With '|| decode(status_code,'D','Cancelled', 'U','Disabled', 'E','Error', 'M','NoManager', 'R','Normal', 'I','Normal', 'C','Normal', 'H','OnHold', 'W','Paused', 'B','Resuming', 'P','Scheduled', 'Q','Standby', 'S','Suspended', 'X','Terminated', 'T','Terminating', 'A','Waiting', 'Z','Waiting', 'G','Warning') \"STATUS\",	Count(*) \"COUNT\" from apps.fnd_concurrent_requests where REQUESTED_START_DATE > sysdate - 12/24 group by phase_code,status_code order by decode(phase_code,'R','Running','I','Inactive','C','Completed','P','Pending'),count(*) desc;" "Concurrent Requests Summary (Past 12 Hours)"							
+
 # Gather Schema Statistics Last Run
 run_sql_PDB "	SET LINESIZE 350
 				SET PAGESIZE 1500
@@ -539,6 +539,7 @@ run_sql_PDB "	SET LINESIZE 350
 				COLUMN \"STATUSCODE\" FORMAT A10
 				COLUMN \"PROGRAM-ARG\" FORMAT A50
 				SELECT DISTINCT a.request_id \"REQUESTID\",c.USER_CONCURRENT_PROGRAM_NAME \"PROGRAM_NAME\",round(((a.actual_completion_date-a.actual_start_date)*24*60*60/60),2) AS \"PROCESS_TIME\",To_Char(a.request_date,'DD-MON-YY HH24:MI:SS') \"REQUESTDATE\",To_Char(a.actual_start_date,'DD-MON-YY HH24:MI:SS') \"STARTDATE\",To_Char(a.actual_completion_date,'DD-MON-YY HH24:MI:SS')\"COMPLETEDATE\",d.user_name \"USERNAME\" , DECODE(a.phase_code,'P', 'Pending','R', 'Running','C', 'Completed','I', 'Inactive','B', 'Blocked','G', 'Waiting','H', 'On Hold','E', 'Error','D', 'Cancelled','Q', 'Standby','Z', 'Paused','Unknown Phase')\"PHASECODE\",DECODE(a.status_code,'A', 'Waiting','B', 'Resuming','C', 'Normal','D', 'Cancelled','E', 'Error','F', 'Scheduled','G', 'Warning','H', 'On Hold','I', 'Normal','M', 'No Manager','Q', 'Standby','S', 'Suspended','T', 'Terminating','U', 'Disabled','W', 'Paused','X', 'Terminated','Z', 'Waiting','Unknown Status')\"STATUSCODE\",a.argument_text \"PROGRAM-ARG\" FROM   apps.fnd_concurrent_requests a,apps.fnd_concurrent_programs b ,apps.FND_CONCURRENT_PROGRAMS_TL c,apps.fnd_user d WHERE a.concurrent_program_id= b.concurrent_program_id AND b.concurrent_program_id=c.concurrent_program_id AND a.requested_by =d.user_id AND trunc(a.actual_completion_date) > SYSDATE - 30 AND c.USER_CONCURRENT_PROGRAM_NAME='Gather Schema Statistics' and argument_text like  '%,%,%,%,%,%,%,%,%' ORDER BY REQUEST_ID DESC;" "Gather Schema Statistics Last Run"							
+
 # EBS Application Profiles Changed In Last Two Days
 run_sql_PDB "	SET LINESIZE 250
 				SET PAGESIZE 1000
@@ -549,6 +550,7 @@ run_sql_PDB "	SET LINESIZE 250
 				COLUMN \"UserName\" FORMAT A15
 				select DISTINCT \"Profile Option\",\"Option Level\",\"Profile Value\",\"ChangeDate\",\"UserName\" from (select tl.user_profile_option_name \"Profile Option\",decode(val.level_id,10001, 'Site',10002, 'Application',10003, 'Responsibility',10004, 'User',10005, 'Server',10006, 'Organization',10007, 'Server+Resp','No idea, boss') \"Option Level\",val.profile_option_value \"Profile Value\",val.last_update_date \"ChangeDate\",usr.user_name \"UserName\" from apps.fnd_profile_options opt,apps.fnd_profile_option_values val,apps.fnd_profile_options_tl tl,apps.fnd_user usr where opt.profile_option_id = val.profile_option_id
 				and opt.profile_option_name = tl.profile_option_name and usr.user_id = val.last_updated_by order by val.last_update_date desc )where rownum <= 2;" "EBS Application Profiles Changed In Last Two Days"
+
 # Workflow Components Service Status
 run_sql_PDB "	SET LINESIZE 250
 				SET PAGESIZE 1000
