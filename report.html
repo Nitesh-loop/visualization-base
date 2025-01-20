@@ -1,0 +1,682 @@
+<html><head><title>Oracle Database Health Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            color: #0056b3;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+        }
+        pre {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: Consolas, 'Courier New', Courier, monospace;
+        }
+        hr {
+            border: 1px solid #0056b3;
+            margin: 20px 0;
+        }
+        .alert {
+            background-color: #ffdddd;
+            color: #d8000c;
+            padding: 10px;
+            border-left: 6px solid #d8000c;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .warning {
+            color: #d8000c;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        p {
+            font-size: 14px;
+        }
+    </style>
+    </head><body>
+    <h1>Oracle Database Health Check - Fri Jan 17 15:58:30 IST 2025</h1>
+    <hr>
+    <h2>Database Details</h2>
+    <pre><code>
+    
+          DBID NAME      CREATED   LOG_MODE     OPEN_MODE
+    ---------- --------- --------- ------------ --------------------
+    2882378540 CDBVIS    21-NOV-24 ARCHIVELOG   READ WRITE
+    </code></pre><hr>
+    <h2>Instance Details</h2>
+    <pre><code>
+    
+    INSTANCE_NAME	HOST_NAME		       VERSION	       STATUS
+    --------------- ------------------------------ --------------- ----------
+    CDBVIS		test.jupiter.com	       19.0.0.0.0      OPEN
+    </code></pre><hr>
+    <h2>Database Size Details For Both CDB/PDB</h2>
+    <pre><code>
+    
+    Con ID Database Name   TotalSize(GB)
+    ------ --------------- -------------
+         1 CDB			3.11
+         3 VIS		      177.13
+    </code></pre><hr>
+    <h2>DataFiles Details For Both CDB/PDB</h2>
+    <pre><code>
+    
+    CONTAINER_NAME	     TABLESPACE_NAME	  FILE_NAME								 STATUS     AUTOEXTEND
+    -------------------- -------------------- ---------------------------------------------------------------------- ---------- ----------
+    CDB		     SYSTEM		  /u01/oracle/19c/oradata/CDBVIS/system01.dbf				 AVAILABLE  YES
+    CDB		     SYSAUX		  /u01/oracle/19c/oradata/CDBVIS/sysaux01.dbf				 AVAILABLE  YES
+    CDB		     UNDOTBS1		  /u01/oracle/19c/oradata/CDBVIS/undotbs01.dbf				 AVAILABLE  YES
+    CDB		     USERS		  /u01/oracle/19c/oradata/CDBVIS/users01.dbf				 AVAILABLE  YES
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f22c_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f22j_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f22t_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f233_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f22m_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f22s_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f238_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f23d_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f23x_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0w80k_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0rl38_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f22y_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f234_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0f23m_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv14cq9_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0sc99_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0r8dx_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0s6gp_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0szss_.dbf		 AVAILABLE  NO
+    VIS		     SYSTEM		  /u01/oracle/data/VIS/datafile/o1_mf_system_mmv0r8dw_.dbf		 AVAILABLE  NO
+    VIS		     SYSAUX		  /u01/oracle/data/VIS/datafile/o1_mf_sysaux_mmv14rr5_.dbf		 AVAILABLE  NO
+    VIS		     SYSAUX		  /u01/oracle/data/VIS/datafile/o1_mf_sysaux_mmv0tycs_.dbf		 AVAILABLE  NO
+    VIS		     APPS_OMO		  /u01/oracle/data/VIS/datafile/o1_mf_apps_omo_mmv0so3r_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_ARCHIVE	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv15770_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_INTERFACE	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0swls_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_MEDIA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f240_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_MEDIA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f247_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_MEDIA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0tm6z_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_NOLOGGING	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0s3m0_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_NOLOGGING	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0tpdd_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_QUEUES	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0w831_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_QUEUES	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0sbyz_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SEED	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f23r_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SEED	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0rwwf_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SEED	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv14jxo_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SEED	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0t01v_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SEED	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0rj7x_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f241_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f246_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f24p_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f24y_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0w85p_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f23y_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_SUMMARY	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv14x6z_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f24b_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f24k_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f255_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f258_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0w885_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f24m_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f24w_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f259_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f25q_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f25x_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0w8bt_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f254_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f256_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f25l_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f25w_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f26f_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0w8cm_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f25m_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f25p_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f26p_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f26c_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0f274_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0w8dp_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0fyj8_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0fqtz_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0fyto_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_DATA	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0s9t8_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0g6k5_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0hpft_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0xhpq_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0gtjx_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0ggj2_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0gtk6_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0q8j0_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0p2s5_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0xqwt_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0pyno_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0ojdz_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0p1x2_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0r3pv_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0pcrg_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv134k8_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0q9fv_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0omd0_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0q89p_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0rs7p_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0q0fp_.dbf		 AVAILABLE  NO
+    VIS		     APPS_TS_TX_IDX	  /u01/oracle/data/VIS/datafile/o1_mf_apps_ts__mmv0tm6v_.dbf		 AVAILABLE  NO
+    VIS		     CTXSYS		  /u01/oracle/data/VIS/datafile/o1_mf_ctxsys_mmv15qpx_.dbf		 AVAILABLE  NO
+    VIS		     DCM		  /u01/oracle/data/VIS/datafile/o1_mf_dcm_mmv0tvtw_.dbf 		 AVAILABLE  NO
+    VIS		     DM_ARCHIVE 	  /u01/oracle/data/VIS/datafile/o1_mf_dm_archi_mmv0sooo_.dbf		 AVAILABLE  NO
+    VIS		     MTR		  /u01/oracle/data/VIS/datafile/o1_mf_mtr_mmv15qdz_.dbf 		 AVAILABLE  NO
+    VIS		     ODM_DATA		  /u01/oracle/data/VIS/datafile/o1_mf_odm_data_mmv0vs4k_.dbf		 AVAILABLE  NO
+    VIS		     OWB		  /u01/oracle/data/VIS/datafile/o1_mf_owb_mmv0tfxm_.dbf 		 AVAILABLE  NO
+    VIS		     OWB		  /u01/oracle/data/VIS/datafile/o1_mf_owb_mmv0v995_.dbf 		 AVAILABLE  NO
+    VIS		     XDB		  /u01/oracle/data/VIS/datafile/o1_mf_xdb_mmv15r0v_.dbf 		 AVAILABLE  NO
+    VIS		     APPS_UNDOTS1	  /u01/oracle/data/VIS/datafile/o1_mf_apps_und_mmv0f23l_.dbf		 AVAILABLE  NO
+    VIS		     APPS_UNDOTS1	  /u01/oracle/data/VIS/datafile/o1_mf_apps_und_mmv0w7yg_.dbf		 AVAILABLE  NO
+    VIS		     APPS_UNDOTS1	  /u01/oracle/data/VIS/datafile/o1_mf_apps_und_mmv0v4qr_.dbf		 AVAILABLE  NO
+    </code></pre><hr>
+    <h2>Tablespace Usage</h2>
+    <pre><code>
+    
+           Container						Free	   Allocated		 Max
+        CON_ID Name 	   TABLESPACE_NAME		    Space GB	    Space GB	Allocated GB
+    ---------- --------------- ------------------------- --------------- --------------- ---------------
+         1 CDB$ROOT	   SYSTEM				 .01		1.08	       32.00
+         1 CDB$ROOT	   UNDOTBS1				 .97		1.00	       32.00
+         1 CDB$ROOT	   USERS				 .00		 .01	       32.00
+         1 CDB$ROOT	   TEMP 						 .18	       32.00
+         1 CDB$ROOT	   SYSAUX				 .11		1.02	       32.00
+         3 VIS		   SYSTEM			       21.59	       38.57		 .00
+         3 VIS		   APPS_TS_INTERFACE			 .67		1.60		 .00
+         3 VIS		   TEMP 						4.88		 .00
+         3 VIS		   DCM					 .02		 .19		 .00
+         3 VIS		   APPS_UNDOTS1 			4.26		5.00		 .00
+         3 VIS		   APPS_TS_MEDIA			1.22		5.00		 .00
+         3 VIS		   APPS_TS_SUMMARY		       11.79	       13.01		 .00
+         3 VIS		   MTR					 .00		 .00		 .00
+         3 VIS		   APPS_OMO				 .01		 .10		 .00
+         3 VIS		   APPS_TS_TX_IDX		       10.58	       40.06		 .00
+         3 VIS		   CTXSYS				 .00		 .00		 .00
+         3 VIS		   APPS_TS_NOLOGGING			 .64		 .71		 .00
+         3 VIS		   ODM_DATA				 .00		 .03		 .00
+         3 VIS		   OWB					2.27		2.27		 .00
+         3 VIS		   SYSAUX				 .90		2.05		 .00
+         3 VIS		   XDB					 .00		 .00		 .00
+         3 VIS		   APPS_TS_TX_DATA			1.64	       52.25		 .00
+         3 VIS		   APPS_TS_SEED 			5.73		8.64		 .00
+         3 VIS		   APPS_TS_QUEUES			1.91		2.15		 .00
+         3 VIS		   APPS_TS_ARCHIVE			 .09		 .47		 .00
+         3 VIS		   DM_ARCHIVE				 .01		 .01		 .00
+    
+    26 rows selected.
+    
+    </code></pre><hr>
+    <h2>Database Resource Utilization</h2>
+    <pre><code>
+    
+    RESOURCE_NAME		       CURRENT_UTILIZATION MAX_UTILIZATION INITIAL_ALLOCATION			    LIMIT_VALUE
+    ------------------------------ ------------------- --------------- ---------------------------------------- ----------------------------------------
+    processes				       158	       175	  200					   200
+    sessions				       180	       220	  400					   400
+    enqueue_resources			       155	       177	10532				     UNLIMITED
+    parallel_max_servers				 4		 4	    8					 32767
+    </code></pre><hr>
+    <h2>Archive Generation Per Day</h2>
+    <pre><code>
+    
+    DAY				     GB ARCHIVES_GENERATED_PER_DAY
+    ------------------------------ -------- --------------------------
+    17-JAN-25			    .00 		      1.00
+    15-JAN-25			    .00 		      1.00
+    </code></pre><hr>
+    <h2>Usage Of Temp Tablespace Usage</h2>
+    <pre><code>
+    
+    Tablespace TotalSize(GB) UsedSize(GB)
+    ---------- ------------- ------------
+    TEMP		   15.70	  .00
+    </code></pre><hr>
+    <h2>Block Corruption Information</h2>
+    <pre><code>
+    </code></pre><hr>
+    <h2>Total Invalid Objects in CDB Database</h2>
+    <pre><code>
+    </code></pre><hr>
+    <h2>Total Number of Online users</h2>
+    <pre><code>
+                    FROM icx_sessions icx, fnd_user fu
+                                           *
+    ERROR at line 5:
+    ORA-00942: table or view does not exist
+    
+    
+    </code></pre><hr>
+    <h2>Total count of Online users</h2>
+    <pre><code>
+                    FROM icx_sessions icx, fnd_user fu
+                                           *
+    ERROR at line 2:
+    ORA-00942: table or view does not exist
+    
+    
+    </code></pre><hr>
+    <h2>Inactive Sessions Summary (More than 24 Hours)</h2>
+    <pre><code>
+    </code></pre><hr>
+    <h2>Database RMAN Backup Summary </h2>
+    <pre><code>
+    </code></pre><hr>
+    <h2>Database Alert Log Errors</h2>
+    <pre><code>
+    
+    TIMESTAMP		       MESSAGE_TEXT
+    ------------------------------ --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    17-JAN-2025 13:10:09	       WARNING: inbound connection timed out (ORA-3136)
+    17-JAN-2025 13:10:10	       WARNING: inbound connection timed out (ORA-3136)
+    17-JAN-2025 13:10:11	       WARNING: inbound connection timed out (ORA-3136)
+    17-JAN-2025 13:10:11	       WARNING: inbound connection timed out (ORA-3136)
+    17-JAN-2025 13:10:11	       WARNING: inbound connection timed out (ORA-3136)
+    17-JAN-2025 13:10:24	       WARNING: inbound connection timed out (ORA-3136)
+    17-JAN-2025 13:10:40	       WARNING: inbound connection timed out (ORA-3136)
+    </code></pre><hr>
+    <h2>Recovery Dest Size & Space Use By Archivelogs</h2>
+    <pre><code>
+    </code></pre><hr>
+    <h2>Total Invalid Objects in PDB Database</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    OWNER	   OBJECT_NAME				    OBJECT_TYPE 			     LAST_DDL_RUN
+    ---------- ---------------------------------------- ---------------------------------------- ------------------------------
+    PUBLIC	   DBMS_MGD_ID_UTL			    SYNONYM				     22-NOV-24
+    OLAPSYS    CWM$EXPORT				    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    ALL$OLAP2_FACTTBLFCTMAPS		    VIEW				     22-NOV-24
+    OLAPSYS    ALL$OLAPMR_FACTTBLFCTMAPS		    VIEW				     22-NOV-24
+    OLAPSYS    DBA$OLAP2_FACTTBLFCTMAPS		    VIEW				     22-NOV-24
+    OLAPSYS    DBA$OLAP2UFACT_LEVEL_USES		    VIEW				     22-NOV-24
+    OLAPSYS    DBA$OLAPMR_FACTTBLFCTMAPS		    VIEW				     22-NOV-24
+    OLAPSYS    CWM2_OLAP_DELETE			    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    CWM2_OLAP_MR_SECURITY_INIT		    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    CWM2_OLAP_METADATA_REFRESH		    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    OLAPFACTVIEW 			    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    OLAPDIMVIEW				    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    ODM$OLAP2UFACT_LEVEL_USES		    VIEW				     22-NOV-24
+    OLAPSYS    DBMS_ODM				    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    DBMS_AWM				    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    CWM2_OLAP_VERIFY_ACCESS		    PACKAGE BODY			     22-NOV-24
+    OLAPSYS    ALL$OLAP2UFACT_LEVEL_USES		    VIEW				     22-NOV-24
+    OLAPSYS    CWM2_OLAP_EXPORT			    PACKAGE BODY			     22-NOV-24
+    APPS	   DBMSOBJGWRAPPER			    SYNONYM				     22-NOV-24
+    APPS	   DBMS_DEFER_QUERY			    SYNONYM				     22-NOV-24
+    APPS	   DBMS_DEFER_SYS			    SYNONYM				     22-NOV-24
+    APPS	   DBMS_DEFER				    SYNONYM				     22-NOV-24
+    APPS	   WMS_EPC_PVT				    PACKAGE BODY			     22-NOV-24
+    APPS	   MRP_COMPANY_USERS_SN 		    MATERIALIZED VIEW			     22-NOV-24
+    APPS	   OZF_EARNING_SUMMARY_MV		    MATERIALIZED VIEW			     22-NOV-24
+    APPS	   GHR_EEOC_DYNAMICS_REPORT		    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_EEOC_STATUS_REPORT		    PACKAGE BODY			     22-NOV-24
+    APPS	   HRI_UTIL				    PACKAGE BODY			     22-NOV-24
+    APPS	   BEN_ACA_XML_PROCESS			    PACKAGE BODY			     22-NOV-24
+    APPS	   BEN_ACA_XML_PROCESS_STATES		    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_DIAGNOSTICS			    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_GUIDELINES			    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_EHRI_DYNRPT_NEW			    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_CPDF_EHRIS_NEW			    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_EHRI_ORG_COMP_RPT		    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_RETIRE_DATA_REPORT		    PACKAGE BODY			     22-NOV-24
+    APPS	   JE_PL_GL_JPK_EXTRACT_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   JE_PL_JPK_DATA_EXTRACT_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_NL_DSR_ARCHIVE			    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_NL_DSRR_ARCHIVE			    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_NL_LTSR_ARCHIVE			    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_NL_WAZO_ARCHIVE			    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_NL_LTSRR_ARCHIVE 		    PACKAGE BODY			     22-NOV-24
+    APPS	   POS_SUPPLIER_SEARCH_INDEX_PKG	    PACKAGE BODY			     22-NOV-24
+    APPS	   AD_ZD_MVIEW				    PACKAGE BODY			     22-NOV-24
+    APPS	   AD_ZD_PREP				    PACKAGE BODY			     22-NOV-24
+    APPS	   JTF_DEBUG_PUB			    PACKAGE BODY			     22-NOV-24
+    APPS	   JTF_DIAGNOSTIC_COREAPI		    PACKAGE BODY			     22-NOV-24
+    APPS	   JTF_TAE_INDEX_CREATION_PVT		    PACKAGE BODY			     22-NOV-24
+    APPS	   JTY_TAE_INDEX_CREATION_PVT		    PACKAGE BODY			     22-NOV-24
+    APPS	   JTY_TERR_DENORM_RULES_PVT		    PACKAGE BODY			     22-NOV-24
+    APPS	   MSC_CL_EXCHANGE_PARTTBL		    PACKAGE BODY			     22-NOV-24
+    APPS	   MSC_GET_PROFILE			    PACKAGE BODY			     22-NOV-24
+    APPS	   MSC_REL_WF				    PACKAGE BODY			     22-NOV-24
+    APPS	   MSC_SCH_WB				    PACKAGE BODY			     22-NOV-24
+    APPS	   MSC_WF_ALLOC_ATP			    PACKAGE BODY			     22-NOV-24
+    APPS	   MSDWF				    PACKAGE BODY			     22-NOV-24
+    APPS	   MSD_WF				    PACKAGE BODY			     22-NOV-24
+    APPS	   PV_CONTEXT_VALUES			    PACKAGE BODY			     22-NOV-24
+    APPS	   PV_ORDER_MGMT_PVT			    PACKAGE BODY			     22-NOV-24
+    APPS	   EAM_WORKORDER_UTIL_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   EGOREPORTWF				    PACKAGE BODY			     22-NOV-24
+    APPS	   EGO_ITEM_BULKLOAD_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   EGO_ITEM_PEOPLE_IMPORT_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   EGO_REPORT_WF_UTIL			    PACKAGE BODY			     22-NOV-24
+    APPS	   EGO_USER_ATTRS_DATA_PVT		    PACKAGE BODY			     22-NOV-24
+    APPS	   ENG_CHANGE_IMPORT_UTIL		    PACKAGE BODY			     22-NOV-24
+    APPS	   ENG_CHANGE_LIFECYCLE_UTIL		    PACKAGE BODY			     22-NOV-24
+    APPS	   ENG_WORKFLOW_UTIL			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP50296_01042007			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP50296_06042005			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP53354_01012004			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP53354_01012005			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP53354_01072007			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP53354_01102008			    PACKAGE BODY			     22-NOV-24
+    APPS	   XNP_MESSAGE				    PACKAGE BODY			     22-NOV-24
+    APPS	   PAY_KW_ANNUAL_REPORTS		    PACKAGE BODY			     22-NOV-24
+    APPS	   PAY_KW_MONTHLY_REPORTS		    PACKAGE BODY			     22-NOV-24
+    APPS	   PA_AUTOALLOC_WF_PKG			    PACKAGE BODY			     22-NOV-24
+    APPS	   CS_KB_SYNC_INDEX_PKG 		    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP53354_01092011			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP55409_01012011			    PACKAGE BODY			     22-NOV-24
+    APPS	   CTO_WIP_WORKFLOW_API_PK		    PACKAGE BODY			     22-NOV-24
+    APPS	   PA_PROGRESS_UTILS			    PACKAGE BODY			     22-NOV-24
+    APPS	   PA_TASK_ASSIGNMENT_UTILS		    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_CAGR_UTILITY_PKG 		    PACKAGE BODY			     22-NOV-24
+    APPS	   PER_DATA_UPDATE_REPORT		    PACKAGE BODY			     22-NOV-24
+    APPS	   JAI_CMN_MTAX_PKG			    PACKAGE BODY			     22-NOV-24
+    APPS	   JAI_OE_OLA_TRIGGER_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   BEN_EXT_THREAD			    PACKAGE BODY			     22-NOV-24
+    APPS	   OKL_SPLIT_CONTRACT_PVT		    PACKAGE BODY			     22-NOV-24
+    APPS	   BEN_RECN_REP 			    PACKAGE BODY			     22-NOV-24
+    APPS	   BOM_TEST_SUBSCR_PKG			    PACKAGE BODY			     22-NOV-24
+    APPS	   BOM_VALIDATE_BOM_COMPONENT		    PACKAGE BODY			     22-NOV-24
+    APPS	   HZ_PARTY_STAGE			    PACKAGE BODY			     22-NOV-24
+    APPS	   IBC_CONTENT_SYNC_INDEX_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   OTA_UTILITY				    PACKAGE BODY			     22-NOV-24
+    APPS	   AP_ACCTG_DATA_FIX_PKG		    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_APD				    PACKAGE BODY			     22-NOV-24
+    APPS	   WSH_UTILITIES			    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_FLEX_WORKFLOW			    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_FLEX_WORKFLOW_APIS		    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_GEN_MIG_CMDS			    PACKAGE BODY			     22-NOV-24
+    APPS	   FND_IMUTL				    PACKAGE BODY			     22-NOV-24
+    APPS	   XDP_AQ_UTILITIES			    PACKAGE BODY			     22-NOV-24
+    APPS	   AR_DOC_TRANSFER_STANDARD		    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_CPDF_EHRIS			    PACKAGE BODY			     22-NOV-24
+    APPS	   GHR_EHRI_DYNRPT			    PACKAGE BODY			     22-NOV-24
+    APPS	   GMA_PURGE_DDL			    PACKAGE BODY			     22-NOV-24
+    APPS	   GMI_PICK_CONFIRM_PUB 		    PACKAGE BODY			     22-NOV-24
+    APPS	   GMI_RESERVATION_UTIL 		    PACKAGE BODY			     22-NOV-24
+    APPS	   GMI_SHIPPING_UTIL			    PACKAGE BODY			     22-NOV-24
+    APPS	   GML_ACCT_GENERATE			    PACKAGE BODY			     22-NOV-24
+    APPS	   GMP_BOM_ROUTING_PKG			    PACKAGE BODY			     22-NOV-24
+    APPS	   OKL_LA_PAYMENTS_PVT			    PACKAGE BODY			     22-NOV-24
+    APPS	   HRI_OPL_EVENT_CAPTURE		    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57308_01011900			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57309_01011900			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57310_01011900			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57311_01011900			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57312_01011900			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57507_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57508_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57509_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57510_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57511_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57512_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP57513_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60280_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60315_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60315_01012010			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60342_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60342_01012006			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60342_01012008			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60342_01012009			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60356_01011951			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60357_01011951			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP60676_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61106_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   AHL_PRD_WORKORDER_PVT		    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61152_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61156_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   WF_SETUP				    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61156_01012010			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61161_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61638_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61867_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61871_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61897_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP61912_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   OE_ITORD_UTIL			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP62837_01012009			    PACKAGE BODY			     22-NOV-24
+    APPS	   WSH_DCP_PVT				    PACKAGE BODY			     22-NOV-24
+    APPS	   AD_ZD_REDEFINITION			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP54639_01010001			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP55409_01012005			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP55409_01012007			    PACKAGE BODY			     22-NOV-24
+    APPS	   FFP55429_01011900			    PACKAGE BODY			     22-NOV-24
+    MGDSYS	   DBMS_MGD_ID_UTL			    PACKAGE				     22-NOV-24
+    MGDSYS	   DBMS_MGD_ID_UTL_INTERNAL		    PACKAGE				     22-NOV-24
+    MGDSYS	   MGD_ID				    TYPE BODY				     22-NOV-24
+    MGDSYS	   DBMS_MGD_ID_UTL			    PACKAGE BODY			     22-NOV-24
+    MGDSYS	   DBMS_MGD_ID_UTL_INTERNAL		    PACKAGE BODY			     22-NOV-24
+    MGDSYS	   USER_MGD_ID_CATEGORY_INS_TRIG	    TRIGGER				     30-DEC-15
+    MGDSYS	   USER_MGD_ID_CATEGORY_DEL_TRIG	    TRIGGER				     30-DEC-15
+    MGDSYS	   USER_MGD_ID_CATEGORY_UPD_TRIG	    TRIGGER				     30-DEC-15
+    MGDSYS	   MGD_ID_SCHEME_BEFORE_INS_TRIG	    TRIGGER				     30-DEC-15
+    MGDSYS	   MGD_ID_SCHEME_BEFORE_UPD_TRIG	    TRIGGER				     30-DEC-15
+    MGDSYS	   USER_MGD_ID_SCHEME_INS_TRIG		    TRIGGER				     30-DEC-15
+    MGDSYS	   USER_MGD_ID_SCHEME_DEL_TRIG		    TRIGGER				     30-DEC-15
+    MGDSYS	   USER_MGD_ID_SCHEME_UPD_TRIG		    TRIGGER				     30-DEC-15
+    MGDSYS	   MGD_ID_LOOKUP_TABLE_INS_TRIG 	    TRIGGER				     30-DEC-15
+    MGDSYS	   MGD_ID_LOOKUP_TABLE_UPD_TRIG 	    TRIGGER				     30-DEC-15
+    
+    173 rows selected.
+    
+    </code></pre><hr>
+    <h2>EBS Application Concurrent Manager Status</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    CONCURRENT MANAGER				      SERVER NODE		     ACTUAL TARGET STATUS
+    ----------------------------------------------------- ------------------------------ ------ ------ ------------------------------
+    Custom Manager2 				      TEST				  4	 4
+    Standard Manager				      TEST				  3	 3
+    Testing Manager 				      TEST				  3	 3
+    CRP Inquiry Manager				      TEST				  1	 1
+    Conflict Resolution Manager			      TEST				  1	 1
+    Email Center Download Processor - Normal Mode	      TEST				  1	 1
+    FastFormula Transaction Manager 		      TEST				  1	 1
+    INV Remote Procedure Manager			      TEST				  1	 1
+    Internal Manager				      TEST				  1	 1
+    Internal Monitor: TEST				      TEST				  1	 1
+    Inventory Manager				      TEST				  1	 1
+    MRP Manager					      TEST				  1	 1
+    OAF_CP_MGR					      TEST				  1	 1
+    OAM Metrics Collection Manager			      TEST				  1	 1
+    Output Post Processor				      TEST				  1	 1
+    PA Streamline Manager				      TEST				  1	 1
+    PO Document Approval Manager			      TEST				  1	 1
+    RCVTM						      TEST				  1	 1
+    Receiving Transaction Manager			      TEST				  1	 1
+    Service Manager: TEST				      TEST				  1	 1
+    Workflow Agent Listener Service 		      TEST				  1	 1
+    Workflow Document Web Services Service		      TEST				  1	 1
+    Workflow Mailer Service 			      TEST				  1	 1
+    Contracts Core Concurrent Manager		      TEST				  0	 0
+    Custom Manager					      TEST				  0	 0 TERMINATED
+    C AQCART Service									  0	 0 DEACTIVATED
+    Collections Manager									  0	 0 DEACTIVATED
+    Cost Rollup Manager(In-Memory Cost Management)						  0	 0 DEACTIVATED
+    Debug Service										  0	 0 DEACTIVATED
+    Email Center Download Processor - Migration Mode					  0	 0 DEACTIVATED
+    Install Base Interface Manager								  0	 0 DEACTIVATED
+    Marketing Data Mining Manager								  0	 0 DEACTIVATED
+    Mobile Push Notification Service							  0	 0 DEACTIVATED
+    OAM Generic Collection Service:TEST							  0	 0 DEACTIVATED
+    Oracle Provisioning Manager								  0	 0 DEACTIVATED
+    SFM Application Monitoring Service							  0	 0 DEACTIVATED
+    SFM Controller Service									  0	 0 DEACTIVATED
+    SFM Event Manager Queue Service 							  0	 0 DEACTIVATED
+    SFM Fulfillment Actions Queue Service							  0	 0 DEACTIVATED
+    SFM Fulfillment Element Ready Queue Service						  0	 0 DEACTIVATED
+    SFM Inbound Messages Queue Service							  0	 0 DEACTIVATED
+    SFM Order Queue Service 								  0	 0 DEACTIVATED
+    SFM SM Interface Test Service								  0	 0 DEACTIVATED
+    SFM Timer Queue Service 								  0	 0 DEACTIVATED
+    SFM Work Item Queue Service								  0	 0 DEACTIVATED
+    Scheduler/Prereleaser Manager								  0	 0 DEACTIVATED
+    Session History Cleanup 								  0	 0 DEACTIVATED
+    Transaction Manager ( Internal use only )						  0	 0
+    Transportation Manager									  0	 0 DEACTIVATED
+    UWQ Worklist Items Release for Crashed session						  0	 0 DEACTIVATED
+    WMS Task Archiving Manager								  0	 0 DEACTIVATED
+    Workflow Mailer 									  0	 0 DEACTIVATED
+    Workflow Summary Mailer 								  0	 0 DEACTIVATED
+    
+    53 rows selected.
+    
+    </code></pre><hr>
+    <h2>Long Runnig Concurrent Request From Last One Hour</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    no rows selected
+    
+    </code></pre><hr>
+    <h2>Request Completed With Warning & Error (Past 12 Hour)</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    no rows selected
+    
+    </code></pre><hr>
+    <h2>Concurrent Requests Summary (Past 12 Hours)</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    STATUS															   COUNT
+    ------------------------------------------------------------------------------------------------------------------------ -------
+    Completed With Normal													      16
+    Pending With Standby													       1
+    
+    </code></pre><hr>
+    <h2>Gather Schema Statistics Last Run</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    no rows selected
+    
+    </code></pre><hr>
+    <h2>EBS Application Profiles Changed In Last Two Days</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    Profile Option					   Option Level 	Profile Value					   ChangeDate	   UserName
+    -------------------------------------------------- -------------------- -------------------------------------------------- --------------- ---------------
+    EAM: PM Debug File (including complete file path)  Site 		/u01/oracle/19c/temp/VIS\eampmeng.log		   23-NOV-24	   ANONYMOUS
+    FTE: Freight Rating Debug Log Directory 	   Site 		/u01/oracle/19c/temp/VIS			   23-NOV-24	   ANONYMOUS
+    
+    </code></pre><hr>
+    <h2>Workflow Components Service Status</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    no rows selected
+    
+    </code></pre><hr>
+    <h2>Workflow Notification Mailer Status</h2>
+    <pre><code>
+    
+    Session altered.
+    
+    
+    no rows selected
+    
+    </code></pre><hr>
+    <h2>EBS Login Page Status</h2>
+    <pre><code>
+    Error: The EBS login page is not accessible. HTTP Status: 000
+    </code></pre><hr>
+    <h2>Average load on server</h2>
+    <pre><code>
+    Load Average:  0.10, 0.12, 0.12 </code></pre><hr>
+    <h2>File System Usage</h2>
+    <pre><code>
+    Filesystem             Size  Used Avail Use% Mounted on
+    /dev/mapper/rhel-root   70G   58G   13G  83% /
+    /dev/mapper/rhel-home   31G   13G   18G  43% /home
+    /dev/mapper/rhel-u01   328G  316G   13G  97% /u01
+    /dev/nvme0n1p2        1014M  275M  740M  28% /boot
+    /dev/nvme0n1p1         599M  5.9M  594M   1% /boot/efi
+    </code></pre><hr>
+    <h2>Total Cores CPU Percentage</h2>
+    <pre><code>
+    Total Cores: 4, CPU Precentage: 24.13%
+    </code></pre><hr>
+    <h2>Memory Swap Percentage</h2>
+    <pre><code>
+    Memory Percentage: 5.55%, Swap Percentage: 0.00%
+    </code></pre><hr>
+    <h2>Server Uptime</h2>
+    <pre><code>
+    up 2 hours, 56 minutes
+    </code></pre><hr>
+    <h2>Current Logged-on Users</h2>
+    <pre><code>
+    NAME    LINE   TIME        IDLE   PID  COMMENT                 
+    oracle  seat0  2025-01-17  13:04  ?    3540     (login         screen)
+    oracle  tty2   2025-01-17  13:04  old  3540     (tty2)         
+    oracle  pts/0  2025-01-17  13:04  old  4208     (192.168.1.7)  
+    oracle  pts/1  2025-01-17  13:05  old  4396     (192.168.1.5)  
+    oracle  pts/2  2025-01-17  13:53  old  9839     (192.168.1.7)  
+    oracle  pts/3  2025-01-17  14:49  old  11620    (192.168.1.7)  
+    oracle  pts/4  2025-01-17  14:52  old  11869    (192.168.1.5)  
+    </code></pre><hr>
+    <h2>Top CPU Consuming Processes</h2>
+    <pre><code>
+    RUSER        PID    PPID  NI WCHAN                     %MEM %CPU            TIME EUSER    STATE FLAGS STIME THCNT COMMAND
+    oracle      6425    5944   0 -                          2.9  0.8        00:01:27 oracle   S         0 13:08    81 java
+    oracle      7905    5944   0 -                          4.3  0.8        00:01:22 oracle   S         0 13:09    84 java
+    oracle      7893    5944   0 -                          4.2  0.7        00:01:15 oracle   S         0 13:09    88 java
+    oracle      4600       1   - hrtimer_nanosleep          0.1  0.6        00:01:08 oracle   S         0 13:06     1 ora_vktm_cdbvis
+    </code></pre><hr>
+    <h2>Top Memory Consuming Processes</h2>
+    <pre><code>
+    RUSER        PID    PPID  NI WCHAN                     %MEM %CPU            TIME EUSER    STATE FLAGS STIME THCNT COMMAND
+    oracle      7905    5944   0 -                          4.3  0.8        00:01:22 oracle   S         0 13:09    84 java
+    oracle      7893    5944   0 -                          4.2  0.7        00:01:15 oracle   S         0 13:09    88 java
+    oracle      6425    5944   0 -                          2.9  0.8        00:01:27 oracle   S         0 13:08    81 java
+    oracle      7895    5944   0 -                          1.9  0.4        00:00:47 oracle   S         0 13:09    57 java
+    </code></pre><hr>
+    <h2> Zombie Processes </h2>
+    <pre><code>
+    </code></pre><hr>
+    <h2> Business Specific Processes </h2>
+    <pre><code>
+    RUSER        PID    PPID  NI WCHAN                     %MEM %CPU            TIME EUSER    STATE FLAGS STIME THCNT COMMAND
+    oracle      4581       1   0 do_epoll_wait              0.0  0.0        00:00:00 oracle   S         0 13:06     1 tnslsnr
+    oracle      6066       1   0 ia32_sys_poll              0.0  0.0        00:00:00 oracle   S         0 13:08     1 tnslsnr
+    </code></pre><hr>
+    <h2>Current Processes/Threads Count</h2>
+    <pre><code>
+    Hard Limit: 16384, Current Usage: 1567
+    </code></pre><hr>
+    <hr><p>Health check completed. Review the sections above for detailed information.</p>
+    </body></html>
+    

@@ -1,5 +1,10 @@
+#!/bin/bash
+
 tempPath='/home/oracle/alertScript'
 . /u01/oracle/19c/dbhome/CDBVIS_test.env
+
+
+
 
 # HTML output file for the health check
 HTMLFILE="/home/oracle/alertScript/log/HEALTH_CHECK_REPORT_FOR_$(hostname)_$(date +%Y%m%d_%H%M%S).html"
@@ -8,8 +13,70 @@ HTMLFILE="/home/oracle/alertScript/log/HEALTH_CHECK_REPORT_FOR_$(hostname)_$(dat
 THRESHOLD=90
 
 
+
+
+
+# Fuction for styling Add HTML headers with CSS styling
+
+genrateStyle() {
+echo "<html><head><title>Oracle Database Health Check</title>" >> $HTMLFILE
+echo "<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f9;
+        color: #333;
+    }
+    h1 {
+        color: #0056b3;
+    }
+    h2 {
+        color: #333;
+        border-bottom: 2px solid #0056b3;
+        padding-bottom: 5px;
+    }
+    pre {
+        background-color: #e9ecef;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+	code {
+        font-family: Consolas, 'Courier New', Courier, monospace;
+    }
+    hr {
+        border: 1px solid #0056b3;
+        margin: 20px 0;
+    }
+    .alert {
+        background-color: #ffdddd;
+        color: #d8000c;
+        padding: 10px;
+        border-left: 6px solid #d8000c;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .warning {
+        color: #d8000c;
+		padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+    p {
+        font-size: 14px;
+    }
+</style>" >> $HTMLFILE
+
+echo "</head><body>" >> $HTMLFILE
+echo "<h1>Oracle Database Health Check - $(date)</h1>" >> $HTMLFILE
+echo "<hr>" >> $HTMLFILE
+
+}
+
+
 # Function to run SQL script and append results to the HTML file
 run_sql_1() {
+    # Defining Parameters
     local sql_query="$1"
     local section_title="$2"
     local check_threshold="$3"
@@ -56,3 +123,18 @@ EOF
 
     echo "</code></pre><hr>" >> $HTMLFILE
 }
+
+
+
+main() {
+
+# Clear previous HTML file
+> $HTMLFILE
+
+
+}
+
+
+
+# Main execution block
+main
