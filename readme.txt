@@ -1,3 +1,5 @@
+Project Directory: C:\Users\91865\Documents\Nitesh\OfficeDoc\EPCCO\Visualization\base
+
 #git setup:
 git init
 git remote add origin https://github.com/Nitesh-loop/web-project-react.git

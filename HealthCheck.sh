@@ -298,7 +298,7 @@ main() {
 > $HTMLFILE
 
 # adding the style sheet
-genrateStyle
+# genrateStyle
 
 
 # Check FrontEnd Page Check
