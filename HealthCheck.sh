@@ -13,7 +13,7 @@ HTMLFILE="/home/oracle/alertScript/log/HEALTH_CHECK_REPORT_FOR_$(hostname)_$(dat
 THRESHOLD=90
 
 # EBS Login URL
-url="https://erpapps.epcco.com:4443/OA_HTML/AppsLocalLogin.jsp"
+url="http://test.jupiter.com:8050/OA_HTML/AppsLocalLogin.jsp"
 
 
 

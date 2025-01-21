@@ -13,7 +13,7 @@ HTMLFILE="/home/oracle/alertScript/log/HEALTH_CHECK_REPORT_FOR_$(hostname)_$(dat
 THRESHOLD=90
 
 # EBS Login URL
-url="http://test.jupiter.com:8050/OA_HTML/AppsLogin.jsp"
+url="http://test.jupiter.com:8050/OA_HTML/AppsLocalLogin.jsp"
 
 
 # Fuction for styling Add HTML headers with CSS styling
@@ -125,10 +125,89 @@ EOF
 }
 
 
+# Function to run SQL script and append results to the HTML file
+run_command() {
+    local command="$1"
+    local section_title="$2"
+
+    echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<pre><code>" >> $HTMLFILE
+    eval "$command" >> $HTMLFILE
+    echo "</code></pre><hr>" >> $HTMLFILE
+}
+
+
+# Function to check URL status
+check_url() {
+    response=$(curl -o /dev/null -s -w "%{http_code}\n" $url)
+
+    # Check for HTTP status 200 OK
+    if [ "$response" -eq 200 ]; then
+        echo "Success: The EBS login page is accessible."
+    else
+        echo "Error: The EBS login page is not accessible. HTTP Status: $response"
+    fi
+}
+
+
+# Function to run SQL script and append results to the HTML file
+run_sql_plain()
+{
+    local sql_query="$1"
+    local section_title="$2"
+    local check_threshold="$3"
+
+    echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<pre><code>" >> $HTMLFILE
+
+    sqlplus -s / as sysdba <<EOF >> $HTMLFILE
+	SET PAGESIZE 1000
+    SET LINESIZE 200
+    SET FEEDBACK OFF
+    SET HEADING ON
+    $sql_query
+    EXIT;
+EOF
+echo "</code></pre><hr>" >> $HTMLFILE
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 main() {
+
+# Check FrontEnd Page Check
+run_command "check_url" "EBS Login Page Status"
+
+# Check For DataFiles Details For Both CDB/PDB
+run_sql_plain " SET LINESIZE 180
+				SET PAGESIZE 1000
+				COLUMN \"CONTAINER_NAME\" FORMAT A20
+				COLUMN \"TABLESPACE_NAME\" FORMAT A20
+				COLUMN \"FILE_NAME\" FORMAT A70
+				COLUMN \"STATUS\" FORMAT A10
+				COLUMN \"AUTOEXTEND\" FORMAT A10
+				SELECT CASE WHEN d.CON_ID = 1 THEN 'CDB$ROOT' ELSE p.PDB_NAME END AS \"CONTAINER_NAME\", d.TABLESPACE_NAME, d.FILE_NAME,d.status as \"STATUS\",d.AUTOEXTENSIBLE as \"AUTOEXTEND\" FROM CDB_DATA_FILES d LEFT JOIN CDB_PDBS p ON d.CON_ID = p.PDB_ID ORDER BY CONTAINER_NAME, d.FILE_ID;" "DataFiles Details For Both CDB/PDB"				
+
 
 # Check Tablespace Usage
 run_sql_1 " WITH free_space AS ( SELECT c.con_id, cf.tablespace_name, SUM(cf.bytes)/1024/1024/1024 AS free_space_gb FROM cdb_free_space cf JOIN v\$containers c ON cf.con_id = c.con_id GROUP BY c.con_id, cf.tablespace_name ), allocated_space AS ( SELECT c.con_id, df.tablespace_name, SUM(df.bytes)/1024/1024/1024 AS allocated_space_gb, MAX(df.maxbytes)/1024/1024/1024 AS max_allocated_gb FROM cdb_data_files df JOIN v\$containers c ON df.con_id = c.con_id GROUP BY c.con_id, df.tablespace_name )SELECT f.con_id,v.name AS con_name, f.tablespace_name,f.free_space_gb, a.allocated_space_gb, a.max_allocated_gb FROM free_space f JOIN allocated_space a ON f.con_id = a.con_id AND f.tablespace_name = a.tablespace_name JOIN v\$containers v ON f.con_id = v.con_id UNION ALL SELECT vc.con_id, vc.name,tf.tablespace_name,NULL AS free_space_gb,SUM(tf.bytes)/1024/1024/1024 AS allocated_space_gb,MAX(tf.maxbytes)/1024/1024/1024 AS max_allocated_gb FROM v\$containers vc JOIN cdb_temp_files tf ON vc.con_id = tf.con_id GROUP BY vc.con_id, vc.name, tf.tablespace_name ORDER BY 1, 2;" "Tablespace Usage" "true"
+
 
 
 }
