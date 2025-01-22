@@ -171,7 +171,7 @@ run_command() {
 
 
 # Function to run SQL script and append results to the HTML file
-run_sql_PDB(){
+run_sql_PDB() {
 	local sql_query="$1"
     local section_title="$2"
     echo "<h2>$section_title</h2>" >> $HTMLFILE
@@ -184,6 +184,19 @@ EOF
 echo "</code></pre><hr>" >> $HTMLFILE
 }
 
+# Function to run the sqlplus with apps user
+run_sql_PDB_app() {
+    local sql_query="$1"
+    local section_title="$2"
+    echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<pre><code>" >> $HTMLFILE
+    sqlplus -s apps/apps@VIS <<EOF >> $HTMLFILE
+	$sql_query
+	EXIT;
+EOF
+echo "</code></pre><hr>" >> $HTMLFILE
+
+}
 
 
 # Function to check URL status
@@ -398,28 +411,6 @@ run_sql_plain " SET LINESIZE 150
 				select Owner AS \"OWNER\",Object_name AS \"OBJECT_NAME\",object_type AS \"OBJECT_TYPE\",last_ddl_time AS \"LAST_DDL_RUN\" from dba_objects where status = 'INVALID';" "Total Invalid Objects in CDB Database"
 
 
-# List of Online users
-run_sql_plain " set lines 132
-				col user_name format a32
-				col description format a50
-				SELECT DISTINCT icx.session_id,
-				icx.user_id,
-				fu.user_name,
-				fu.description
-				FROM icx_sessions icx, fnd_user fu
-				WHERE disabled_flag != 'Y'
-				AND icx.pseudo_flag = 'N'
-				AND (last_connect +
-				DECODE (fnd_profile.VALUE ('ICX_SESSION_TIMEOUT'),
-				NULL, limit_time,
-				0 , limit_time,
-				fnd_profile.VALUE ('ICX_SESSION_TIMEOUT')/60) / 24) > SYSDATE
-				AND icx.counter < limit_connects
-				AND icx.user_id = fu.user_id
-				AND fu.user_name!='GUEST';
-				" "Total Number of Online users"
-
-
 # Database RMAN Backup Summary 
 run_sql_plain "	SET LINESIZE 150
 				SET PAGESIZE 1000
@@ -457,20 +448,40 @@ run_sql_plain " SET LINESIZE 300
 
 
 # Total count of Online Users
-run_sql_PDB "   SELECT DISTINCT count (*)
-				FROM icx_sessions icx, fnd_user fu
-				WHERE disabled_flag != 'Y'
-				AND icx.pseudo_flag = 'N'
-				AND (last_connect + 
-				DECODE (fnd_profile.VALUE ('ICX_SESSION_TIMEOUT'),
-				NULL, limit_time,
-				0 , limit_time,
-				fnd_profile.VALUE ('ICX_SESSION_TIMEOUT')/60) / 24) > SYSDATE
-				AND icx.counter < limit_connects
-				AND icx.user_id = fu.user_id
-				AND fu.user_name!='GUEST';
-				" "Total count of Online users"
-
+run_sql_PDB_app "   SELECT DISTINCT count (*)
+				    FROM icx_sessions icx, fnd_user fu
+				    WHERE disabled_flag != 'Y'
+				    AND icx.pseudo_flag = 'N'
+				    AND (last_connect + 
+				    DECODE (fnd_profile.VALUE ('ICX_SESSION_TIMEOUT'),
+				    NULL, limit_time,
+				    0 , limit_time,
+				    fnd_profile.VALUE ('ICX_SESSION_TIMEOUT')/60) / 24) > SYSDATE
+				    AND icx.counter < limit_connects
+				    AND icx.user_id = fu.user_id
+				    AND fu.user_name!='GUEST';
+				    " "Total count of Online users"
+# Total Current online users
+run_sql_PDB_app "
+                set lines 132
+                col user_name format a32
+                col description format a50
+                SELECT DISTINCT icx.session_id,
+                icx.user_id,
+                fu.user_name,
+                fu.description
+                FROM icx_sessions icx, fnd_user fu
+                WHERE disabled_flag != 'Y'
+                AND icx.pseudo_flag = 'N'
+                AND (last_connect +
+                DECODE (fnd_profile.VALUE ('ICX_SESSION_TIMEOUT'),
+                NULL, limit_time,
+                0 , limit_time,
+                fnd_profile.VALUE ('ICX_SESSION_TIMEOUT')/60) / 24) > SYSDATE
+                AND icx.counter < limit_connects
+                AND icx.user_id = fu.user_id
+                AND fu.user_name!='GUEST';
+                " "Current online users"
 
 # Inactive Sessions Summary (More than 24 Hours)			
 run_sql_PDB "	SET LINESIZE 250
@@ -482,7 +493,8 @@ run_sql_PDB "	SET LINESIZE 250
 				COLUMN \"PROGRAM\" FORMAT A60
 				COLUMN \"MACHINE\" FORMAT A50
 				COLUMN \"COUNT\" FORMAT 99999
-				select SID,SERIAL#,STATUS,module,program,machine, count(*) from v\$session where status='INACTIVE' and username='APPS' and last_call_et > (60*60*24) group by module,program,machine,SID,SERIAL#,STATUS order by count(*) desc;" "Inactive Sessions Summary (More than 24 Hours)"
+				select SID,SERIAL#,STATUS,module,program,machine, count(*) from v\$session where status='INACTIVE' and username='APPS' and last_call_et > (60*60*24) group by module,program,machine,SID,SERIAL#,STATUS order by count(*) desc;
+                " "Inactive Sessions Summary (More than 24 Hours)"
 
 
 
