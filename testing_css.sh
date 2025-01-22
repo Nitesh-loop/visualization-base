@@ -143,7 +143,6 @@ run_sql_plain()
 
     
     echo "<h2>$section_title</h2>" >> $HTMLFILE
-    echo "<div class='sql-output-title'><h2>$section_title</h2></div>" >> $HTMLFILE
     echo "<pre><code>" >> $HTMLFILE
 
     sqlplus -s / as sysdba <<EOF >> $HTMLFILE
@@ -342,14 +341,14 @@ run_sql_plain "	COLUMN \"Con ID\" FORMAT 999
 				select  c.con_id \"Con ID\" ,nvl(p.name, 'CDB') \"Database Name\" , round(sum(bytes)/1024/1024/1024) \"TotalSize(GB)\" from  cdb_temp_files c, v\$pdbs p where c.con_id=p.con_id(+) GROUP BY c.con_id,name)group by con_id,name order by con_id;" "Database Size Details For Both CDB/PDB"
 
 # Check For DataFiles Details For Both CDB/PDB
-run_sql_plain " SET LINESIZE 180
-				SET PAGESIZE 1000
-				COLUMN \"CONTAINER_NAME\" FORMAT A20
-				COLUMN \"TABLESPACE_NAME\" FORMAT A20
-				COLUMN \"FILE_NAME\" FORMAT A70
-				COLUMN \"STATUS\" FORMAT A10
-				COLUMN \"AUTOEXTEND\" FORMAT A10
-				SELECT CASE WHEN d.CON_ID = 1 THEN 'CDB$ROOT' ELSE p.PDB_NAME END AS \"CONTAINER_NAME\", d.TABLESPACE_NAME, d.FILE_NAME,d.status as \"STATUS\",d.AUTOEXTENSIBLE as \"AUTOEXTEND\" FROM CDB_DATA_FILES d LEFT JOIN CDB_PDBS p ON d.CON_ID = p.PDB_ID ORDER BY CONTAINER_NAME, d.FILE_ID;" "DataFiles Details For Both CDB/PDB"				
+run_sql_plain " SET LINESIZE 200
+                SET PAGESIZE 1000
+                COLUMN "CONTAINER_NAME" FORMAT A20
+                COLUMN "TABLESPACE_NAME" FORMAT A25
+                COLUMN "FILE_NAME" FORMAT A75
+                COLUMN "STATUS" FORMAT A15
+                COLUMN "AUTOEXTEND" FORMAT A15
+                SELECT CASE WHEN d.CON_ID = 1 THEN 'CDB$ROOT' ELSE p.PDB_NAME END AS \"CONTAINER_NAME\", d.TABLESPACE_NAME, d.FILE_NAME,d.status as \"STATUS\",d.AUTOEXTENSIBLE as \"AUTOEXTEND\" FROM CDB_DATA_FILES d LEFT JOIN CDB_PDBS p ON d.CON_ID = p.PDB_ID ORDER BY CONTAINER_NAME, d.FILE_ID;" "DataFiles Details For Both CDB/PDB"				
 
 # Check Tablespace Usage
 run_sql_1 " WITH free_space AS ( SELECT c.con_id, cf.tablespace_name, SUM(cf.bytes)/1024/1024/1024 AS free_space_gb FROM cdb_free_space cf JOIN v\$containers c ON cf.con_id = c.con_id GROUP BY c.con_id, cf.tablespace_name ), allocated_space AS ( SELECT c.con_id, df.tablespace_name, SUM(df.bytes)/1024/1024/1024 AS allocated_space_gb, MAX(df.maxbytes)/1024/1024/1024 AS max_allocated_gb FROM cdb_data_files df JOIN v\$containers c ON df.con_id = c.con_id GROUP BY c.con_id, df.tablespace_name )SELECT f.con_id,v.name AS con_name, f.tablespace_name,f.free_space_gb, a.allocated_space_gb, a.max_allocated_gb FROM free_space f JOIN allocated_space a ON f.con_id = a.con_id AND f.tablespace_name = a.tablespace_name JOIN v\$containers v ON f.con_id = v.con_id UNION ALL SELECT vc.con_id, vc.name,tf.tablespace_name,NULL AS free_space_gb,SUM(tf.bytes)/1024/1024/1024 AS allocated_space_gb,MAX(tf.maxbytes)/1024/1024/1024 AS max_allocated_gb FROM v\$containers vc JOIN cdb_temp_files tf ON vc.con_id = tf.con_id GROUP BY vc.con_id, vc.name, tf.tablespace_name ORDER BY 1, 2;" "Tablespace Usage" "true"
@@ -421,37 +420,6 @@ run_sql_plain " set lines 132
 				" "Total Number of Online users"
 
 
-
-
-# Total count of Online Users
-run_sql_plain " SELECT DISTINCT count (*)
-				FROM icx_sessions icx, fnd_user fu
-				WHERE disabled_flag != 'Y'
-				AND icx.pseudo_flag = 'N'
-				AND (last_connect + 
-				DECODE (fnd_profile.VALUE ('ICX_SESSION_TIMEOUT'),
-				NULL, limit_time,
-				0 , limit_time,
-				fnd_profile.VALUE ('ICX_SESSION_TIMEOUT')/60) / 24) > SYSDATE
-				AND icx.counter < limit_connects
-				AND icx.user_id = fu.user_id
-				AND fu.user_name!='GUEST';
-				" "Total count of Online users"
-
-
-# Inactive Sessions Summary (More than 24 Hours)			
-run_sql_plain "	SET LINESIZE 250
-				SET PAGESIZE 2000
-				COLUMN \"SID\" FORMAT 99999
-				COLUMN \"SERIAL#\" FORMAT 99999
-				COLUMN \"STATUS\" FORMAT A10
-				COLUMN \"MODULE\" FORMAT A60
-				COLUMN \"PROGRAM\" FORMAT A60
-				COLUMN \"MACHINE\" FORMAT A50
-				COLUMN \"COUNT\" FORMAT 99999
-				select SID,SERIAL#,STATUS,module,program,machine, count(*) from v\$session where status='INACTIVE' and username='APPS' and last_call_et > (60*60*24) group by module,program,machine,SID,SERIAL#,STATUS order by count(*) desc;" "Inactive Sessions Summary (More than 24 Hours)"
-
-
 # Database RMAN Backup Summary 
 run_sql_plain "	SET LINESIZE 150
 				SET PAGESIZE 1000
@@ -486,6 +454,37 @@ run_sql_plain " SET LINESIZE 300
 
 
 # --------------------------------------query on PDB--------------------------------------
+
+
+# Total count of Online Users
+run_sql_PDB "   SELECT DISTINCT count (*)
+				FROM icx_sessions icx, fnd_user fu
+				WHERE disabled_flag != 'Y'
+				AND icx.pseudo_flag = 'N'
+				AND (last_connect + 
+				DECODE (fnd_profile.VALUE ('ICX_SESSION_TIMEOUT'),
+				NULL, limit_time,
+				0 , limit_time,
+				fnd_profile.VALUE ('ICX_SESSION_TIMEOUT')/60) / 24) > SYSDATE
+				AND icx.counter < limit_connects
+				AND icx.user_id = fu.user_id
+				AND fu.user_name!='GUEST';
+				" "Total count of Online users"
+
+
+# Inactive Sessions Summary (More than 24 Hours)			
+run_sql_PDB "	SET LINESIZE 250
+				SET PAGESIZE 2000
+				COLUMN \"SID\" FORMAT 99999
+				COLUMN \"SERIAL#\" FORMAT 99999
+				COLUMN \"STATUS\" FORMAT A10
+				COLUMN \"MODULE\" FORMAT A60
+				COLUMN \"PROGRAM\" FORMAT A60
+				COLUMN \"MACHINE\" FORMAT A50
+				COLUMN \"COUNT\" FORMAT 99999
+				select SID,SERIAL#,STATUS,module,program,machine, count(*) from v\$session where status='INACTIVE' and username='APPS' and last_call_et > (60*60*24) group by module,program,machine,SID,SERIAL#,STATUS order by count(*) desc;" "Inactive Sessions Summary (More than 24 Hours)"
+
+
 
 # Total Invalid Objects in PDB Database
 run_sql_PDB "   SET LINESIZE 150
