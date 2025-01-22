@@ -337,7 +337,23 @@ run_sql_plain   "   SET LINESIZE 150
                     SHOW PARAMETER SGA;
                 " "SGA Values "
 
+# Show PGA
+run_sql_plain   "   SET LINESIZE 150
+                    SET PAGESIZE 1000
+                    COLUMN "NAME" FORMAT A50
+                    COLUMN "TYPE" FORMAT A25
+                    COLUMN "VALUE" FORMAT A50
+                    SHOW PARAMETER PGA;
+                " "SGA Values "
 
+# Show PROCESSES
+run_sql_plain   "   SET LINESIZE 150
+                    SET PAGESIZE 1000
+                    COLUMN "NAME" FORMAT A50
+                    COLUMN "TYPE" FORMAT A25
+                    COLUMN "VALUE" FORMAT A50
+                    SHOW PARAMETER PROCESSES;
+                " "SGA Values "
 
 
 

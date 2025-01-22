@@ -589,6 +589,9 @@ run_sql_PDB "	SET LINESIZE 300
 				SELECT component_name AS \"COMPONENT_NAME\",CASE WHEN component_status = 'RUNNING' THEN 'RUNNING' ELSE 'DOWN' END AS \"COMPONENT_STATUS\" FROM apps.fnd_svc_components WHERE component_type = 'WF_MAILER' and ZD_SYNC='UPDATED';" "Workflow Notification Mailer Status"				
 
 
+#--------------------------------------Advance Parameters--------------------------------------
+
+# Show SGA
 
 
 
