@@ -28,33 +28,32 @@ echo "<style>
         background-color: #f4f4f9;
         color: #333;
     }
-
     h1 {
         color: #0056b3;
+        margin-bottom: 10px;
     }
-
     h2 {
         color: #333;
         border-bottom: 2px solid #0056b3;
         padding-bottom: 5px;
+        margin-top: 30px;
+        margin-bottom: 10px;
     }
-
     pre {
         background-color: #e9ecef;
         padding: 10px;
         border-radius: 5px;
         overflow-x: auto;
+        border: 1px solid #ccc;
     }
-
     code {
         font-family: Consolas, 'Courier New', Courier, monospace;
+        font-size: 14px;
     }
-
     hr {
         border: 1px solid #0056b3;
         margin: 20px 0;
     }
-
     .alert {
         background-color: #ffdddd;
         color: #d8000c;
@@ -63,38 +62,25 @@ echo "<style>
         margin-bottom: 20px;
         border-radius: 5px;
     }
-
     .warning {
         color: #d8000c;
         padding: 15px;
         border-radius: 5px;
         overflow-x: auto;
+        background-color: #fff8f0;
+        border: 1px solid #d8000c;
     }
-
     p {
         font-size: 14px;
-    }
-
-    /* CSS Grid for columns */
-    .container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-    }
-
-    .column {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        line-height: 1.5;
     }
 </style>" >> $HTMLFILE
 
 echo "</head><body>" >> $HTMLFILE
 echo "<h1>Oracle Database Health Check - $(date)</h1>" >> $HTMLFILE
 echo "<hr>" >> $HTMLFILE
-
 }
+
 
 
 # Function to run SQL script and append results to the HTML file
@@ -155,7 +141,9 @@ run_sql_plain()
     local section_title="$2"
     local check_threshold="$3"
 
+    
     echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<div class='sql-output-title'><h2>$section_title</h2></div>" >> $HTMLFILE
     echo "<pre><code>" >> $HTMLFILE
 
     sqlplus -s / as sysdba <<EOF >> $HTMLFILE
@@ -166,7 +154,8 @@ run_sql_plain()
     $sql_query
     EXIT;
 EOF
-echo "</code></pre><hr>" >> $HTMLFILE
+    echo "</code></pre><hr>" >> $HTMLFILE
+
 }
 
 
@@ -320,7 +309,7 @@ main() {
 > $HTMLFILE
 
 # adding the style sheet
-# genrateStyle
+genrateStyle
 
 
 # Check FrontEnd Page Check

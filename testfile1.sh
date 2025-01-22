@@ -66,6 +66,7 @@ echo "<style>
     p {
         font-size: 14px;
     }
+    
 </style>" >> $HTMLFILE
 
 echo "</head><body>" >> $HTMLFILE
