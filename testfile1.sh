@@ -30,20 +30,25 @@ echo "<style>
     }
     h1 {
         color: #0056b3;
+        margin-bottom: 10px;
     }
     h2 {
         color: #333;
         border-bottom: 2px solid #0056b3;
         padding-bottom: 5px;
+        margin-top: 30px;
+        margin-bottom: 10px;
     }
     pre {
         background-color: #e9ecef;
         padding: 10px;
         border-radius: 5px;
         overflow-x: auto;
+        border: 1px solid #ccc;
     }
-	code {
+    code {
         font-family: Consolas, 'Courier New', Courier, monospace;
+        font-size: 14px;
     }
     hr {
         border: 1px solid #0056b3;
@@ -59,21 +64,23 @@ echo "<style>
     }
     .warning {
         color: #d8000c;
-		padding: 15px;
+        padding: 15px;
         border-radius: 5px;
         overflow-x: auto;
+        background-color: #fff8f0;
+        border: 1px solid #d8000c;
     }
     p {
         font-size: 14px;
+        line-height: 1.5;
     }
-    
 </style>" >> $HTMLFILE
 
 echo "</head><body>" >> $HTMLFILE
 echo "<h1>Oracle Database Health Check - $(date)</h1>" >> $HTMLFILE
 echo "<hr>" >> $HTMLFILE
-
 }
+
 
 
 # Function to run SQL script and append results to the HTML file
@@ -134,6 +141,7 @@ run_sql_plain()
     local section_title="$2"
     local check_threshold="$3"
 
+    
     echo "<h2>$section_title</h2>" >> $HTMLFILE
     echo "<pre><code>" >> $HTMLFILE
 
@@ -145,7 +153,8 @@ run_sql_plain()
     $sql_query
     EXIT;
 EOF
-echo "</code></pre><hr>" >> $HTMLFILE
+    echo "</code></pre><hr>" >> $HTMLFILE
+
 }
 
 
@@ -162,7 +171,7 @@ run_command() {
 
 
 # Function to run SQL script and append results to the HTML file
-run_sql_PDB(){
+run_sql_PDB() {
 	local sql_query="$1"
     local section_title="$2"
     echo "<h2>$section_title</h2>" >> $HTMLFILE
@@ -175,6 +184,19 @@ EOF
 echo "</code></pre><hr>" >> $HTMLFILE
 }
 
+# Function to run the sqlplus with apps user
+run_sql_PDB_app() {
+    local sql_query="$1"
+    local section_title="$2"
+    echo "<h2>$section_title</h2>" >> $HTMLFILE
+    echo "<pre><code>" >> $HTMLFILE
+    sqlplus -s apps/apps@VIS <<EOF >> $HTMLFILE
+	$sql_query
+	EXIT;
+EOF
+echo "</code></pre><hr>" >> $HTMLFILE
+
+}
 
 
 # Function to check URL status
@@ -292,65 +314,34 @@ hardlimit() {
 
 
 
-
-
-
 # --------------------------------------Main Fuction--------------------------------------
 main() {
-
 
 # Clear previous HTML file
 > $HTMLFILE
 
-# Check FrontEnd Page Check
-run_command "check_url" "EBS Login Page Status"
-
-# Check the Load average on the server
-run_command "loadAverage" "Average load on server"
+# adding the style sheet
+genrateStyle
 
 
 
-# Database Details
-run_sql_plain "select dbid,name,created,log_mode,open_mode from v\$database;" "Database Details"
 
-# Check Instance Details
-run_sql_plain " SET LINESIZE 180
-				SET PAGESIZE 1000
-				COLUMN \"Instance_name\" FORMAT A15
-				COLUMN \"host_name\" FORMAT A30
-				COLUMN \"version\" FORMAT A15
-				COLUMN \"status\" FORMAT A10
-				select instance_name,host_name,version,status from v\$instance;" "Instance Details"
+#--------------------------------------Advance Parameters--------------------------------------
 
-# Database Size Details For Both CDB/PDB
-run_sql_plain "	COLUMN \"Con ID\" FORMAT 999
-				COLUMN \"Database Name\" FORMAT A15
-				COLUMN \"TotalSize(GB)\" FORMAT 999.99
-				COLUMN \"Total Size of CDB in GB\" FORMAT 999.99
-
-				select con_id \"Con ID\" ,name \"Database Name\",SUM(SIZE_GB) \"TotalSize(GB)\"  from (select  c.con_id,nvl(p.name, 'CDB') name, sum(bytes)/1024/1024/1024 SIZE_GB from  cdb_data_files c, v\$pdbs p where c.con_id=p.con_id(+) GROUP BY c.con_id,name UNION
-				select  c.con_id \"Con ID\" ,nvl(p.name, 'CDB') \"Database Name\" , round(sum(bytes)/1024/1024/1024) \"TotalSize(GB)\" from  cdb_temp_files c, v\$pdbs p where c.con_id=p.con_id(+) GROUP BY c.con_id,name)group by con_id,name order by con_id;" "Database Size Details For Both CDB/PDB"
+# Show SGA
+run_sql_plain   "   SET LINESIZE 150
+                    SET PAGESIZE 1000
+                    COLUMN "NAME" FORMAT A50
+                    COLUMN "TYPE" FORMAT A25
+                    COLUMN "VALUE" FORMAT A50
+                    SHOW PARAMETER SGA;
+                " "SGA Values "
 
 
 
-# Check For DataFiles Details For Both CDB/PDB
-run_sql_plain " SET LINESIZE 180
-				SET PAGESIZE 1000
-				COLUMN \"CONTAINER_NAME\" FORMAT A20
-				COLUMN \"TABLESPACE_NAME\" FORMAT A20
-				COLUMN \"FILE_NAME\" FORMAT A70
-				COLUMN \"STATUS\" FORMAT A10
-				COLUMN \"AUTOEXTEND\" FORMAT A10
-				SELECT CASE WHEN d.CON_ID = 1 THEN 'CDB$ROOT' ELSE p.PDB_NAME END AS \"CONTAINER_NAME\", d.TABLESPACE_NAME, d.FILE_NAME,d.status as \"STATUS\",d.AUTOEXTENSIBLE as \"AUTOEXTEND\" FROM CDB_DATA_FILES d LEFT JOIN CDB_PDBS p ON d.CON_ID = p.PDB_ID ORDER BY CONTAINER_NAME, d.FILE_ID;" "DataFiles Details For Both CDB/PDB"				
-
-# Check Tablespace Usage
-run_sql_1 " WITH free_space AS ( SELECT c.con_id, cf.tablespace_name, SUM(cf.bytes)/1024/1024/1024 AS free_space_gb FROM cdb_free_space cf JOIN v\$containers c ON cf.con_id = c.con_id GROUP BY c.con_id, cf.tablespace_name ), allocated_space AS ( SELECT c.con_id, df.tablespace_name, SUM(df.bytes)/1024/1024/1024 AS allocated_space_gb, MAX(df.maxbytes)/1024/1024/1024 AS max_allocated_gb FROM cdb_data_files df JOIN v\$containers c ON df.con_id = c.con_id GROUP BY c.con_id, df.tablespace_name )SELECT f.con_id,v.name AS con_name, f.tablespace_name,f.free_space_gb, a.allocated_space_gb, a.max_allocated_gb FROM free_space f JOIN allocated_space a ON f.con_id = a.con_id AND f.tablespace_name = a.tablespace_name JOIN v\$containers v ON f.con_id = v.con_id UNION ALL SELECT vc.con_id, vc.name,tf.tablespace_name,NULL AS free_space_gb,SUM(tf.bytes)/1024/1024/1024 AS allocated_space_gb,MAX(tf.maxbytes)/1024/1024/1024 AS max_allocated_gb FROM v\$containers vc JOIN cdb_temp_files tf ON vc.con_id = tf.con_id GROUP BY vc.con_id, vc.name, tf.tablespace_name ORDER BY 1, 2;" "Tablespace Usage" "true"
 
 
 }
-
-
-
 
 
 
