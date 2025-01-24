@@ -328,7 +328,7 @@ genrateStyle
 
 
 # Total count of Online Users
-run_sql_PDB_app "   SELECT DISTINCT COUNT(*)
+run_sql_PDB "   SELECT DISTINCT COUNT(*)
                     FROM apps.icx_sessions icx, apps.fnd_user fu
                     WHERE icx.disabled_flag != 'Y'
                     AND icx.pseudo_flag = 'N'
@@ -345,7 +345,7 @@ run_sql_PDB_app "   SELECT DISTINCT COUNT(*)
 
 
 # Total Current online users
-run_sql_PDB_app "
+run_sql_PDB "
                 set lines 132
                 col user_name format a32
                 col description format a50
