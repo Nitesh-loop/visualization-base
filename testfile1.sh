@@ -324,6 +324,48 @@ main() {
 genrateStyle
 
 
+# --------------------------------------query on PDB--------------------------------------
+
+
+# Total count of Online Users
+run_sql_PDB_app "   SELECT DISTINCT COUNT(*)
+                    FROM apps.icx_sessions icx, apps.fnd_user fu
+                    WHERE icx.disabled_flag != 'Y'
+                    AND icx.pseudo_flag = 'N'
+                    AND (icx.last_connect + 
+                        DECODE(apps.fnd_profile.VALUE('ICX_SESSION_TIMEOUT'),
+                                NULL, icx.limit_time,
+                                0, icx.limit_time,
+                                apps.fnd_profile.VALUE('ICX_SESSION_TIMEOUT') / 60) / 24) > SYSDATE
+                    AND icx.counter < icx.limit_connects
+                    AND icx.user_id = fu.user_id
+                    AND fu.user_name != 'GUEST';
+				    " "Total count of Online users"
+
+
+
+# Total Current online users
+run_sql_PDB_app "
+                set lines 132
+                col user_name format a32
+                col description format a50
+                SELECT DISTINCT icx.session_id,
+                icx.user_id,
+                fu.user_name,
+                fu.description
+                FROM apps.icx_sessions icx, apps.fnd_user fu
+                WHERE icx.disabled_flag != 'Y'
+                AND icx.pseudo_flag = 'N'
+                AND (icx.last_connect +
+                    DECODE(apps.fnd_profile.VALUE('ICX_SESSION_TIMEOUT'),
+                            NULL, icx.limit_time,
+                            0, icx.limit_time,
+                            apps.fnd_profile.VALUE('ICX_SESSION_TIMEOUT') / 60) / 24) > SYSDATE
+                AND icx.counter < icx.limit_connects
+                AND icx.user_id = fu.user_id
+                AND fu.user_name != 'GUEST';
+                " "Current online users"
+
 
 
 #--------------------------------------Advance Parameters--------------------------------------
