@@ -184,21 +184,6 @@ EOF
 echo "</code></pre><hr>" >> $HTMLFILE
 }
 
-# Function to run the sqlplus with apps user
-run_sql_PDB_app() {
-    local sql_query="$1"
-    local section_title="$2"
-    echo "<h2>$section_title</h2>" >> $HTMLFILE
-    echo "<pre><code>" >> $HTMLFILE
-    sqlplus -s apps/apps@VIS <<EOF >> $HTMLFILE
-	$sql_query
-	EXIT;
-EOF
-echo "</code></pre><hr>" >> $HTMLFILE
-
-}
-
-
 # Function to check URL status
 check_url() {
     response=$(curl -o /dev/null -s -w "%{http_code}\n" $url)
