@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## Health Check Script For DB, EBS, OS ##
+
 tempPath='/home/oracle/alertScript'
 . /u01/oracle/19c/dbhome/CDBVIS_test.env
 
@@ -578,7 +580,6 @@ run_sql_PDB "	SET LINESIZE 300
 
 #--------------------------------------Advance Parameters--------------------------------------
 
-
 # Show SGA
 run_sql_plain   "   SET LINESIZE 150
                     SET PAGESIZE 1000
@@ -595,7 +596,41 @@ run_sql_plain   "   SET LINESIZE 150
                     COLUMN "TYPE" FORMAT A25
                     COLUMN "VALUE" FORMAT A50
                     SHOW PARAMETER PGA;
-                " "SGA Values "
+                " "PGA Values "
+
+# Show PROCESSES
+run_sql_plain   "   SET LINESIZE 150
+                    SET PAGESIZE 1000
+                    COLUMN "NAME" FORMAT A50
+                    COLUMN "TYPE" FORMAT A25
+                    COLUMN "VALUE" FORMAT A50
+                    SHOW PARAMETER PROCESSES;
+                " "Processes Values "
+
+
+
+# Alert Log and Trace Files
+run_command "tail -n 30 /u01/oracle/19c/diag/rdbms/cdbvis/CDBVIS/trace/alert_CDBVIS.log" " Alert Log"
+
+# Redo log files:
+run_sql_plain "     SET LINESIZE 150
+                    SET PAGESIZE 1000
+                    COLUMN "GROUP" FORMAT A50
+                    COLUMN "MEMBER" FORMAT A50
+                    SELECT GROUP#, MEMBER FROM v\$logfile;
+            " "Redo log files"
+
+
+# WebLogic Server Monitoring
+run_command "ps -ef | grep oacore_server | grep -v grep | wc -l" "Admin server status for Oacore"
+
+run_command "ps -ef | grep forms_server | grep -v grep | wc -l" "Admin server status for forms"
+
+run_command "ps -ef | grep oafm_server | grep -v grep | wc -l" "Admin server status for Oafm"
+
+
+# weblogic admin server webpage return status
+run_command "curl -L -o /dev/null -s -w \"%{http_code}\n\" http://test.jupiter.com:7052/console" "Admin server webpage return status"
 
 
 
@@ -605,7 +640,6 @@ run_sql_plain   "   SET LINESIZE 150
 
 # Disk Space
 run_command "df -h | grep -v tmpfs" "File System Usage"
-
 
 # CPU utilization
 run_command "cpu_usage" "Total Cores CPU Percentage"
@@ -638,6 +672,16 @@ run_command "ps -e | head -1; ps -e | grep -v ps | grep -wE 'smon|tnslsnr'" " Bu
 
 # Processes and Threads Counts
 run_command "hardlimit" "Current Processes/Threads Count"
+
+
+# Check for open ports and connections on the system:
+run_command " netstat -tuln | grep -E '7052|8050|1571' " "open ports and connections "
+
+# Monitor disk performance and I/O stats:
+run_command "sar -pd 2 5|grep Average" "Average of Disk performance"
+
+# VMSTAT output
+run_command "vmstat -t -w -S M 2 4 -y | sed '1,2d' | column -t -N Run,Block,Swap,FreeMem,BuffMem,CacheMem,SwpIn,SwpOut,BlkIn,BlkOut,Int,CtxSwtch,Usr,Sys,Idle,Wait,Steal,Date,Time" "VMSTAT output"
 
 
 }
