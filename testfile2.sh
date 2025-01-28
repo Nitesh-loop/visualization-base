@@ -333,7 +333,7 @@ run_sql_plain   "   SET LINESIZE 150
                     COLUMN "TYPE" FORMAT A25
                     COLUMN "VALUE" FORMAT A50
                     SHOW PARAMETER PGA;
-                " "SGA Values "
+                " "PGA Values "
 
 # Show PROCESSES
 run_sql_plain   "   SET LINESIZE 150
@@ -342,7 +342,7 @@ run_sql_plain   "   SET LINESIZE 150
                     COLUMN "TYPE" FORMAT A25
                     COLUMN "VALUE" FORMAT A50
                     SHOW PARAMETER PROCESSES;
-                " "SGA Values "
+                " "Processes Values "
 
 
 
@@ -350,13 +350,26 @@ run_sql_plain   "   SET LINESIZE 150
 run_command "tail -n 50 /u01/oracle/19c/diag/rdbms/cdbvis/CDBVIS/trace/alert_CDBVIS.log" " Alert Log"
 
 # Redo log files:
-run_command "       SET LINESIZE 150
+run_sql_plain "     SET LINESIZE 150
                     SET PAGESIZE 1000
                     COLUMN "GROUP" FORMAT A50
-                    COLUMN "STATUS" FORMAT A25
                     COLUMN "MEMBER" FORMAT A50
-                SELECT GROUP#, STATUS, MEMBER FROM V$LOGFILE;
-            "
+                    SELECT GROUP#, MEMBER FROM v\$logfile;
+            " "Redo log files"
+
+
+# WebLogic Server Monitoring
+
+run_command "ps -ef | grep oacore_server | grep -v grep | wc -l" "Admin server status for Oacore"
+
+run_command "ps -ef | grep forms_server | grep -v grep | wc -l" "Admin server status for forms"
+
+run_command "ps -ef | grep oafm_server | grep -v grep | wc -l" "Admin server status for Oafm"
+
+# weblogic admin server webpage return status
+
+run_command "curl -L -o /dev/null -s -w \"%{http_code}\n\" http://test.jupiter.com:7052/console" "Admin server webpage return status"
+
 
 
 }
