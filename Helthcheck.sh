@@ -21,7 +21,7 @@ url="http://test.jupiter.com:8050/OA_HTML/AppsLocalLogin.jsp"
 
 # Fuction for styling Add HTML headers with CSS styling
 
-genrateStyle() {
+generateStyle() {
 echo "<html><head><title>Oracle Database Health Check</title>" >> $HTMLFILE
 echo "<style>
     body {
@@ -308,7 +308,7 @@ main() {
 > $HTMLFILE
 
 # adding the style sheet
-genrateStyle
+generateStyle
 
 
 # Check FrontEnd Page Check
