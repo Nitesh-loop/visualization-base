@@ -1,0 +1,145 @@
+# EBS R12.2-specific schema health checks to validate critical components of your application schemas (APPS, product schemas, etc.):
+
+1. Invalid Objects in APPS Schema
+Check for invalid objects in the APPS schema and dependent modules:
+
+-- Invalid objects in APPS schema
+SELECT owner, object_type, COUNT(*) FROM dba_objects WHERE owner = 'APPS' AND status = 'INVALID' GROUP BY owner, object_type;
+
+APPS	SYNONYM				4
+APPS	MATERIALIZED VIEW	2
+APPS	PACKAGE BODY		134
+
+-- Invalid objects in product schemas (e.g., GL, AP, AR)
+SELECT owner, object_type, COUNT(*) FROM dba_objects WHERE owner IN ('GL','AP','AR','PO') AND status = 'INVALID' GROUP BY owner, object_type;
+
+//no output
+
+
+2. APPS Schema Grants Validation
+Ensure APPS has required privileges for EBS operations:
+
+-- Check grants to APPS user
+SELECT grantee, privilege, COUNT(*) FROM dba_tab_privs WHERE grantee = 'APPS' GROUP BY grantee, privilege;
+
+grantee privilege COUNT(*)
+APPS	DELETE		41980
+APPS	DEBUG		41970
+APPS	UPDATE		41980
+APPS	REFERENCES	23575
+APPS	EXECUTE		528
+APPS	SELECT		53542
+APPS	ALTER		33094
+APPS	INDEX		22036
+APPS	READ		23309
+APPS	FLASHBACK	23460
+APPS	INHERIT PRIVILEGES	1
+APPS	INSERT		41980
+APPS	QUERY REWRITE	23460
+APPS	ENQUEUE		34
+APPS	USE			1
+APPS	MERGE VIEW	1536
+APPS	WRITE		26
+APPS	ON COMMIT REFRESH	23460
+APPS	DEQUEUE		34
+
+
+-- Verify APPS has execute on key packages
+SELECT table_name FROM dba_tab_privs WHERE grantee = 'APPS' AND privilege = 'EXECUTE' AND table_name IN ('FND_GLOBAL','FND_PROFILE');
+
+// no output
+
+
+3. Public Synonyms for EBS Objects
+Identify missing public synonyms (common post-upgrade):
+
+-- Objects missing public synonyms
+SELECT owner, object_name, object_type 
+FROM dba_objects 
+WHERE owner IN ('APPS','GL','AP') 
+  AND object_name NOT IN (
+    SELECT table_name 
+    FROM dba_synonyms 
+    WHERE owner = 'PUBLIC'
+  );
+
+
+SELECT COUNT(*) AS total_count
+FROM dba_objects 
+WHERE owner IN ('APPS', 'GL', 'AP') 
+  AND object_name NOT IN (
+    SELECT table_name 
+    FROM dba_synonyms 
+    WHERE owner = 'PUBLIC'
+  );
+  
+total_count
+184940
+
+
+
+4. Concurrent Program Schema Issues
+Check for invalid concurrent program definitions:
+
+-- Concurrent programs with invalid PL/SQL entry points
+SELECT concurrent_program_name, executable_id 
+FROM fnd_concurrent_programs 
+WHERE executable_id IN (
+  SELECT executable_id 
+  FROM fnd_executables 
+  WHERE execution_file_name NOT LIKE '%/%'
+);
+  
+SELECT COUNT(*) AS total_count
+FROM fnd_concurrent_programs 
+WHERE executable_id IN (
+  SELECT executable_id 
+  FROM fnd_executables 
+  WHERE execution_file_name NOT LIKE '%/%'
+);
+
+total_count
+13282
+
+
+
+
+5. Profile Option Validation
+Verify critical profile options affecting schemas:
+
+-- Check profile options with NULL or invalid values
+SELECT profile_option_name, user_profile_option_name 
+FROM fnd_profile_options 
+WHERE profile_option_name IN (
+  'CONC:GSM_ENABLED', 'APPS_VALIDATION_LEVEL'
+);
+
+
+//
+ORA-00904: "USER_PROFILE_OPTION_NAME": invalid identifier
+
+
+
+6. EBS Table Statistics Health
+Check stale statistics on key EBS tables:
+
+-- Tables with stale/no statistics (e.g., FND tables)
+SELECT owner, table_name, last_analyzed, stale_stats 
+FROM dba_tab_statistics 
+WHERE owner = 'APPS' 
+  AND table_name IN (
+    'FND_CONCURRENT_REQUESTS','FND_CONCURRENT_PROGRAMS'
+  );
+  
+//no output
+
+
+
+7. Materialized View (MV) Status
+Validate MVs used in EBS modules (e.g., ASCP, MRP):
+
+-- Broken or stale MVs
+SELECT owner, mview_name, refresh_mode, last_refresh_type 
+FROM dba_mviews 
+WHERE owner = 'APPS' 
+  AND (staleness != 'FRESH' OR last_refresh_date < SYSDATE - 1);

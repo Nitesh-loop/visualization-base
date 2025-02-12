@@ -1,0 +1,92 @@
+# focus only on essential EBS application services:
+
+1. Clean Process List (HTTP, OPMN, EBS Workers)
+
+ps -eo pid,user,cmd --cols $COLUMNS --sort cmd | grep -Ew 'httpd|opmn|(ora_)[a-z]+_(proc|service)' | grep -vE 'grep|defunct|/ora_|/bin/sh'
+
+2251 root     /usr/sbin/httpd -DFOREGROUND
+2352 apache   /usr/sbin/httpd -DFOREGROUND
+2353 apache   /usr/sbin/httpd -DFOREGROUND
+2355 apache   /usr/sbin/httpd -DFOREGROUND
+2357 apache   /usr/sbin/httpd -DFOREGROUND
+5855 oracle   /u01/ebs/fs2/FMW_Home/webtier/ohs/bin/httpd.worker -DSSL
+5877 oracle   /u01/ebs/fs2/FMW_Home/webtier/ohs/bin/httpd.worker -DSSL
+5879 oracle   /u01/ebs/fs2/FMW_Home/webtier/ohs/bin/httpd.worker -DSSL
+5881 oracle   /u01/ebs/fs2/FMW_Home/webtier/ohs/bin/httpd.worker -DSSL
+5882 oracle   /u01/ebs/fs2/FMW_Home/webtier/ohs/bin/httpd.worker -DSSL
+7010 oracle   /u01/ebs/fs2/EBSapps/comn/util/jdk32/jre/bin/java -classpath /u01/ebs/fs2/FMW_Home/webtier/opmn/lib/wlfullclient.jar:/u01/ebs/fs2/FMW_Home/
+5564 oracle   /u01/ebs/fs2/FMW_Home/webtier/opmn/bin/opmn -d
+5566 oracle   /u01/ebs/fs2/FMW_Home/webtier/opmn/bin/opmn -d
+
+
+2. Grouped View by Service Type
+
+echo "===== HTTP Servers ====="; pgrep -fl httpd | grep -v "grep"
+
+===== HTTP Servers =====
+2251 httpd
+2352 httpd
+2353 httpd
+2355 httpd
+2357 httpd
+5855 httpd.worker
+5877 httpd.worker
+5879 httpd.worker
+5881 httpd.worker
+5882 httpd.worker
+
+echo "===== OPMN Services ===="; pgrep -fl opmn | grep -v "grep"
+
+===== OPMN Services ====
+5564 opmn
+5566 opmn
+7010 java
+
+echo "===== EBS Workers ======"; pgrep -fl "ora_.*_(proc|service)" | grep -v "grep"
+
+===== EBS Workers ======
+
+
+
+3. EBS-Specific Control Scripts (Best Practice)
+
+# Check OPMN-managed services (Formal EBS way)
+$ADMIN_SCRIPTS_HOME/adopmnctl.sh status
+
+You are running adopmnctl.sh version 120.0.12020000.2
+
+Checking status of OPMN managed processes...
+
+Processes in Instance: EBS_web_OHS1
+---------------------------------+--------------------+---------+---------
+ias-component                    | process-type       |     pid | status
+---------------------------------+--------------------+---------+---------
+EBS_web                          | OHS                |    5855 | Alive
+
+
+adopmnctl.sh: exiting with status 0
+
+adopmnctl.sh: check the logfile /u01/ebs/fs2/inst/apps/VIS_test/logs/appl/admin/log/adopmnctl.txt for more information ...
+
+
+# Check Apache/HTTP Server status (EBS-specific)
+$ADMIN_SCRIPTS_HOME/adapcctl.sh status
+
+
+You are running adapcctl.sh version 120.0.12020000.6
+
+Checking status of OPMN managed Oracle HTTP Server (OHS) instance ...
+
+Processes in Instance: EBS_web_OHS1
+---------------------------------+--------------------+---------+---------
+ias-component                    | process-type       |     pid | status
+---------------------------------+--------------------+---------+---------
+EBS_web                          | OHS                |    5855 | Alive
+
+
+adapcctl.sh: exiting with status 0
+
+adapcctl.sh: check the logfile /u01/ebs/fs2/inst/apps/VIS_test/logs/appl/admin/log/adapcctl.txt for more information ...
+
+
+

@@ -1,0 +1,41 @@
+SQL> desc CDB_SERVICES;
+
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ SERVICE_ID                                                                                                     NUMBER
+ NAME                                                                                                           VARCHAR2(64)
+ NAME_HASH                                                                                                      NUMBER
+ NETWORK_NAME                                                                                                   VARCHAR2(512)
+ CREATION_DATE                                                                                                  DATE
+ CREATION_DATE_HASH                                                                                             NUMBER
+ FAILOVER_METHOD                                                                                                VARCHAR2(64)
+ FAILOVER_TYPE                                                                                                  VARCHAR2(64)
+ FAILOVER_RETRIES                                                                                               NUMBER(10)
+ FAILOVER_DELAY                                                                                                 NUMBER(10)
+ MIN_CARDINALITY                                                                                                NUMBER
+ MAX_CARDINALITY                                                                                                NUMBER
+ GOAL                                                                                                           VARCHAR2(12)
+ DTP                                                                                                            VARCHAR2(1)
+ ENABLED                                                                                                        VARCHAR2(3)
+ AQ_HA_NOTIFICATIONS                                                                                            VARCHAR2(3)
+ CLB_GOAL                                                                                                       VARCHAR2(5)
+ EDITION                                                                                                        VARCHAR2(128)
+ COMMIT_OUTCOME                                                                                                 VARCHAR2(3)
+ RETENTION_TIMEOUT                                                                                              NUMBER
+ REPLAY_INITIATION_TIMEOUT                                                                                      NUMBER
+ SESSION_STATE_CONSISTENCY                                                                                      VARCHAR2(128)
+ GLOBAL_SERVICE                                                                                                 VARCHAR2(3)
+ PDB                                                                                                            VARCHAR2(128)
+ SQL_TRANSLATION_PROFILE                                                                                        VARCHAR2(261)
+ MAX_LAG_TIME                                                                                                   VARCHAR2(128)
+ GSM_FLAGS                                                                                                      NUMBER
+ PQ_SVC                                                                                                         VARCHAR2(64)
+ STOP_OPTION                                                                                                    VARCHAR2(13)
+ FAILOVER_RESTORE                                                                                               VARCHAR2(6)
+ DRAIN_TIMEOUT                                                                                                  NUMBER
+ TABLE_FAMILY_ID                                                                                                NUMBER
+ PLACEMENT_POLICY                                                                                               NUMBER
+ RESET_STATE                                                                                                    VARCHAR2(6)
+ VCSPARE1                                                                                                       VARCHAR2(1024)
+ NSPARE1                                                                                                        NUMBER
+ CON_ID                                                                                                         NUMBER

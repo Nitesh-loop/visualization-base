@@ -1,0 +1,62 @@
+SQL> desc FND_CONCURRENT_QUEUES;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ APPLICATION_ID                            NOT NULL NUMBER(15)
+ CONCURRENT_QUEUE_ID                       NOT NULL NUMBER(15)
+ CONCURRENT_QUEUE_NAME                     NOT NULL VARCHAR2(256)
+ LAST_UPDATE_DATE                          NOT NULL DATE
+ LAST_UPDATED_BY                           NOT NULL NUMBER(15)
+ CREATION_DATE                             NOT NULL DATE
+ CREATED_BY                                NOT NULL NUMBER(15)
+ LAST_UPDATE_LOGIN                         NOT NULL NUMBER(15)
+ PROCESSOR_APPLICATION_ID                  NOT NULL NUMBER(15)
+ CONCURRENT_PROCESSOR_ID                   NOT NULL NUMBER(15)
+ MAX_PROCESSES                             NOT NULL NUMBER(4)
+ RUNNING_PROCESSES                         NOT NULL NUMBER(4)
+ CACHE_SIZE                                         NUMBER(3)
+ MIN_PROCESSES                                      NUMBER(4)
+ TARGET_PROCESSES                                   NUMBER(4)
+ TARGET_NODE                                        VARCHAR2(256)
+ SLEEP_SECONDS                                      NUMBER(4)
+ CONTROL_CODE                                       VARCHAR2(1)
+ DIAGNOSTIC_LEVEL                                   VARCHAR2(1)
+ MANAGER_TYPE                                       VARCHAR2(30)
+ NODE_NAME                                          VARCHAR2(256)
+ NODE_NAME2                                         VARCHAR2(256)
+ OS_QUEUE                                           VARCHAR2(30)
+ OS_QUEUE2                                          VARCHAR2(30)
+ DATA_GROUP_ID                                      NUMBER(15)
+ RESTART_TYPE                                       VARCHAR2(1)
+ RESTART_INTERVAL                                   NUMBER(15)
+ ATTRIBUTE_CATEGORY                                 VARCHAR2(30)
+ ATTRIBUTE                                          VARCHAR2(2000)
+ ATTRIBUTE1                                         VARCHAR2(30)
+ ATTRIBUTE2                                         VARCHAR2(30)
+ ATTRIBUTE3                                         VARCHAR2(30)
+ ATTRIBUTE4                                         VARCHAR2(30)
+ ATTRIBUTE5                                         VARCHAR2(30)
+ ATTRIBUTE6                                         VARCHAR2(30)
+ ATTRIBUTE7                                         VARCHAR2(30)
+ ATTRIBUTE8                                         VARCHAR2(30)
+ ATTRIBUTE9                                         VARCHAR2(30)
+ ATTRIBUTE10                                        VARCHAR2(30)
+ ATTRIBUTE11                                        VARCHAR2(30)
+ ATTRIBUTE12                                        VARCHAR2(30)
+ TARGET_QUEUE                                       VARCHAR2(30)
+ ENABLED_FLAG                              NOT NULL VARCHAR2(1)
+ RESOURCE_CONSUMER_GROUP                            VARCHAR2(30)
+ PMON_STAT                                          NUMBER
+ LAST_VERIFIED                                      DATE
+ WORK_START                                         DATE
+ WORK_END                                           DATE
+ PCP_FLAG                                           VARCHAR2(1)
+ INSTANCE_NUMBER                                    NUMBER
+ CONTEXT_BUFFER                                     VARCHAR2(2000)
+ SERVICE_PARAMETERS                                 VARCHAR2(2000)
+ TIME_PERIOD_ID                                     NUMBER(15)
+ TIME_PERIOD_APP_ID                                 NUMBER(15)
+ CONCURRENT_TIME_PERIOD_ID                          NUMBER(15)
+ PERIOD_APPLICATION_ID                              NUMBER(15)
+ SECURITY_GROUP_ID                                  NUMBER
+ ZD_EDITION_NAME                           NOT NULL VARCHAR2(30)
+ ZD_SYNC                                   NOT NULL VARCHAR2(30)

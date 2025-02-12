@@ -1,0 +1,168 @@
+The search results mention MOS docs like 396009.1 for initialization parameters and 2552181.1 for interoperability notes. 
+These could be sources for parameters to monitor. Also, 
+the EBS 19c Database Upgrade Analyzer (Doc ID 2704990.1) is a script provided by Oracle for pre-upgrade checks, 
+which might be useful for monitoring too.
+
+
+1. Database Architecture (CDB/PDB)
+-- Check CDB/PDB status
+SELECT NAME, OPEN_MODE, CON_ID FROM V$CONTAINERS;
+
+-- Verify PDB registration with listener
+SELECT SERVICE_NAME, CON_ID FROM CDB_SERVICES;					//service_name does't exist
+
+2. EBS-Specific Initialization Parameters
+Ensure parameters align with EBS requirements (refer to MOS Doc ID 396009.1):
+
+-- Critical parameters for EBS
+SHOW PARAMETER utl_file_dir;  -- Should be migrated to directory objects			
+
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+utl_file_dir                         unknown
+
+
+
+SHOW PARAMETER parallel_servers_target;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+parallel_servers_target              integer     8
+
+
+
+SHOW PARAMETER session_cached_cursors;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+session_cached_cursors               integer     500
+
+
+
+3. EBS Schema Health Checks: Validate APPS schema and invalid objects:
+
+-- Check APPS schema validity
+SELECT COUNT(*) FROM DBA_OBJECTS WHERE OWNER = 'APPS' AND STATUS = 'INVALID';
+
+  COUNT(*)
+----------
+         0
+
+
+-- Recompile invalid objects (if needed)
+EXEC UTL_RECOMP.RECOMP_SERIAL('APPS');
+
+
+
+4. Concurrent Manager Status:
+Monitor concurrent manager processes and stuck requests:
+
+-- Check active concurrent managers
+SELECT RUNNING_PROCESSES, TARGET_PROCESSES FROM FND_CONCURRENT_QUEUES WHERE QUEUE_NAME = 'STANDARD';
+
+ERROR at line 1:
+ORA-00904: "QUEUE_NAME": invalid identifier
+
+
+
+-- Identify stuck requests
+SELECT REQUEST_ID, PHASE_CODE, STATUS_CODE FROM FND_CONCURRENT_REQUESTS WHERE HOLD_FLAG = 'Y' OR STATUS_CODE = 'E';
+
+REQUEST_ID P S
+---------- - -
+   7464469 C E
+   7448304 C D
+   7457479 C E
+
+
+
+5. File System and Directory Objects
+Post-UTL_FILE_DIR migration checks:
+
+-- List EBS directory objects
+SELECT DIRECTORY_NAME, DIRECTORY_PATH FROM DBA_DIRECTORIES WHERE OWNER = 'APPS';
+
+no rows selected
+
+
+
+6. EBS Application Tier Health
+Validate autoconfig status and services:
+
+# Check autoconfig logs
+tail -n 100 $ADMIN_SCRIPTS_HOME/adconfig.log
+
+tail: cannot open '/u01/ebs/fs2/inst/apps/VIS_test/admin/scripts/adconfig.log' for reading: No such file or directory
+
+
+# Verify application services
+ps -ef | grep -E '(httpd|ora|opmn)'						//very clutered output
+
+# Filtered view of EBS application tier processes
+ps -eo pid,user,cmd --sort cmd | grep -E '(httpd|opmn|ora)' | grep -vE 'grep|defunct|/ora_'
+
+# Check OPMN services
+$ADMIN_SCRIPTS_HOME/adopmnctl.sh status
+
+You are running adopmnctl.sh version 120.0.12020000.2
+
+Checking status of OPMN managed processes...
+
+Processes in Instance: EBS_web_OHS1
+---------------------------------+--------------------+---------+---------
+ias-component                    | process-type       |     pid | status
+---------------------------------+--------------------+---------+---------
+EBS_web                          | OHS                |    5855 | Alive
+
+
+adopmnctl.sh: exiting with status 0
+
+adopmnctl.sh: check the logfile /u01/ebs/fs2/inst/apps/VIS_test/logs/appl/admin/log/adopmnctl.txt for more information ...
+
+
+# Check HTTP Server
+$ADMIN_SCRIPTS_HOME/adapcctl.sh status
+
+You are running adapcctl.sh version 120.0.12020000.6
+
+Checking status of OPMN managed Oracle HTTP Server (OHS) instance ...
+
+Processes in Instance: EBS_web_OHS1
+---------------------------------+--------------------+---------+---------
+ias-component                    | process-type       |     pid | status
+---------------------------------+--------------------+---------+---------
+EBS_web                          | OHS                |    5855 | Alive
+
+
+adapcctl.sh: exiting with status 0
+
+adapcctl.sh: check the logfile /u01/ebs/fs2/inst/apps/VIS_test/logs/appl/admin/log/adapcctl.txt for more information ...
+
+
+
+
+7. Performance Metrics
+Monitor EBS-specific performance issues:
+
+-- Check for "row cache mutex" waits (common post-19c upgrade)
+SELECT EVENT, TOTAL_WAITS, TIME_WAITED_MICRO FROM V$SYSTEM_EVENT WHERE EVENT LIKE '%row cache mutex%';
+
+EVENT                                                            TOTAL_WAITS TIME_WAITED_MICRO
+---------------------------------------------------------------- ----------- -----------------
+row cache mutex                                                            3             24308
+
+
+EVENT                                                            TOTAL_WAITS TIME_WAITED_MICRO
+---------------------------------------------------------------- ----------- -----------------
+row cache mutex                                                            1                 4
+
+
+
+8. Critical MOS Documents for Scripts
+Doc ID 2704990.1: E-Business Suite 19c Database Upgrade Analyzer (run pre/post-upgrade checks).
+Doc ID 2552181.1: Interoperability notes for EBS 12.2 and 19c.
+Doc ID 2183357.1: Reference for applying RUPs in EBS environments.
+
+Use adgrants.sql (from EBS) to validate roles/privileges in CDB/PDB setups.
+For advanced troubleshooting, use ADZDDBCC.sql (from Oracle Support) to validate EBS database consistency.
