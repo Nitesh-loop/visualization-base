@@ -172,52 +172,5 @@ WHERE refresh_method = 'FAST';
 
 
 
-8. Schema Growth Analysis
-Identify unexpected schema growth (e.g., temp segments):
-
--- Top 10 largest segments in APPS schema
-SELECT segment_name, segment_type, bytes/1024/1024 AS size_mb 
-FROM dba_segments 
-WHERE owner = 'APPS' 
-ORDER BY bytes DESC 
-FETCH FIRST 10 ROWS ONLY;
-
-SYS_LOB0000137260C00004$$	LOB SUBPARTITION	96
-OZF_SALES_TRANSACTIONS_ALL_BKP	TABLE	39
-SYS_LOB0000609598C00004$$	LOB SUBPARTITION	16
-SYS_LOB0000524029C00004$$	LOB SUBPARTITION	16
-SYS_LOB0000609598C00004$$	LOB SUBPARTITION	14
-SYS_LOB0000609598C00004$$	LOB SUBPARTITION	12
-AW$ODPCODE	TABLE SUBPARTITION	8
-AW$ODPCODE	TABLE SUBPARTITION	8
-AW$ODPCODE	TABLE SUBPARTITION	8
-AW$ODPCODE	TABLE SUBPARTITION	8
-
-
-
-9. Database Links Used by EBS
-Check validity of EBS database links:
-
--- Invalid database links (common in ADOP patching)
-SELECT owner, db_link, host 
-FROM dba_db_links 
-WHERE owner IN ('APPS','APPLSYS') 
-  AND host NOT LIKE '%ebs_hostname%';
-  
-//no output
-
-
-10. Unused Indexes in APPS Schema
-Identify unused indexes (common in EBS customizations):
-
--- Indexes never used since database startup
-SELECT object_owner, object_name 
-FROM v$object_usage 
-WHERE used = 'NO' 
-  AND object_owner = 'APPS';
-  
-ORA-00904: "OBJECT_OWNER": invalid identifier
-
-
 
 

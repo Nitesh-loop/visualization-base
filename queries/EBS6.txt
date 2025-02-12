@@ -1,0 +1,105 @@
+1. Custom Index Validation
+Identify non-Oracle-standard indexes (common in customized EBS environments):
+
+-- Custom indexes not prefixed with APPS standard
+SELECT owner, index_name, table_name 
+FROM dba_indexes 
+WHERE owner = 'APPS' 
+  AND index_name NOT LIKE '%\_PK' ESCAPE '\' 
+  AND index_name NOT LIKE '%\_U1' ESCAPE '\' 
+  AND index_name NOT LIKE 'FND\_%' ESCAPE '\';
+  
+  
+SELECT COUNT(*) AS total_count
+FROM dba_indexes 
+WHERE owner = 'APPS' 
+  AND index_name NOT LIKE '%\_PK' ESCAPE '\' 
+  AND index_name NOT LIKE '%\_U1' ESCAPE '\' 
+  AND index_name NOT LIKE 'FND\_%' ESCAPE '\';
+  
+  
+total_count
+1255
+
+
+
+2. Invalid Synonyms
+Check for synonyms pointing to non-existent objects:
+
+-- Broken public synonyms in EBS
+SELECT owner, synonym_name, table_owner, table_name 
+FROM dba_synonyms 
+WHERE table_owner IN ('APPS','GL','AP','AR') 
+  AND (table_name NOT IN (SELECT object_name FROM dba_objects WHERE owner = table_owner));
+  
+owner	synonym_name			table_owner		table_name
+APPS	AP_PAYMENT_DISTS_MRC_V	AP				AP_PAYMENT_DISTS_MRC_V_ALL
+APPS	AP_RECON_DISTS_MRC_V	AP				AP_RECON_DISTS_MRC_V_ALL
+
+
+3. EBS Table Partition Health
+Validate partitioned tables (common in modules like GL, AR):
+
+-- Partitions nearing MAXVALUE (risk of data failure)
+SELECT table_owner, table_name, partition_name, high_value 
+FROM dba_tab_partitions 
+WHERE table_owner = 'APPS' 
+  AND high_value LIKE '%MAXVALUE%';
+  
+ORA-00932: inconsistent datatypes: expected CHAR got LONG
+
+
+
+
+
+4. Stale EBS Interface Tables
+Identify uncleared interface tables (e.g., GL_INTERFACE):
+
+-- Interface tables with old data (>7 days)
+SELECT table_name, num_rows, last_analyzed 
+FROM dba_tables 
+WHERE owner = 'APPS' 
+  AND table_name IN ('GL_INTERFACE','AP_INTERFACE_REJECTIONS') 
+  AND num_rows > 0 
+  AND last_analyzed < SYSDATE - 7;
+  
+  
+//no output
+
+
+
+5. Indexes on Foreign Keys
+Check missing indexes on foreign key columns (prevents table locks):
+
+-- Foreign keys without indexes (EBS-specific tables)
+SELECT c.owner, c.table_name, c.constraint_name, c.r_constraint_name 
+FROM dba_constraints c 
+WHERE owner = 'APPS' 
+  AND constraint_type = 'R' 
+  AND NOT EXISTS (
+    SELECT 1 
+    FROM dba_ind_columns i 
+    WHERE i.table_owner = c.owner 
+      AND i.table_name = c.table_name 
+      AND i.column_name IN (
+        SELECT column_name 
+        FROM dba_cons_columns 
+        WHERE owner = c.owner 
+          AND constraint_name = c.constraint_name
+      )
+  );
+  
+  
+//no output
+
+
+6. EBS Security Grants Audit
+Check direct grants bypassing EBS roles (security risk):
+
+-- Direct grants to users (should use roles like APPS_READ_ONLY)
+SELECT grantee, privilege, table_name 
+FROM dba_tab_privs 
+WHERE owner = 'APPS' 
+  AND grantee NOT IN ('APPS','PUBLIC') 
+  AND grantee NOT LIKE '%ROLE%';
+
